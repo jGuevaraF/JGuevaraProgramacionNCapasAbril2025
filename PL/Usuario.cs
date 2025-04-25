@@ -16,6 +16,38 @@ namespace PL
 
             Console.WriteLine("Dame el correo");
             usuario.Correo = Console.ReadLine();
+
+            bool registroExitoso = BL.Usuario.Add(usuario);
+
+            if (registroExitoso)
+            {
+                Console.WriteLine("Se agrego correctamente");
+            }
+            else
+            {
+                Console.WriteLine("No se pudo agregar al usuario.");
+            }
+        }
+
+
+
+        public static void Delete()
+        {
+            Console.WriteLine("Ingresa el id del usuario");
+
+            //int IdUsuario = int.Parse(Console.ReadLine());
+            int IdUsuario = Convert.ToInt32(Console.ReadLine());
+
+            bool registroEliminado = BL.Usuario.Delete(IdUsuario);
+
+            if (registroEliminado)
+            {
+                Console.WriteLine("Se elimino correctamente");
+            }
+            else
+            {
+                Console.WriteLine("No se pudo eliminar al usuario.");
+            }
         }
     }
 }

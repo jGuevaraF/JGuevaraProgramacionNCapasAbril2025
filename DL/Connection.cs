@@ -8,7 +8,7 @@ namespace DL
 {
     public class Connection
     {
-        public string GetConnection()
+        public static string GetConnection()
         {
             string conexion = "Data Source=.;Initial Catalog=JGuevaraProgramacionNCapasAbril2025;User ID=sa;Password=pass@word1;Encrypt=False";
 
