@@ -10,9 +10,10 @@ namespace BL
     public class Usuario
     {
 
-        public static bool Add(ML.Usuario usuario)
+        public static ML.Result Add(ML.Usuario Usuario)
         {
-            bool registroExitoso = false;
+            ML.Result result = new ML.Result();
+
             try
             {
                 using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
@@ -23,29 +24,33 @@ namespace BL
 
                     SqlCommand sqlCommand = new SqlCommand(query, context);
 
-                    sqlCommand.Parameters.AddWithValue("@Nombre", usuario.Nombre);
-                    sqlCommand.Parameters.AddWithValue("@Correo", usuario.Correo);
+                    sqlCommand.Parameters.AddWithValue("@Nombre", Usuario.Nombre);
+                    sqlCommand.Parameters.AddWithValue("@Correo", Usuario.Correo);
 
                     int filasAfectadas = sqlCommand.ExecuteNonQuery();
 
                     if (filasAfectadas > 0)
                     {
                         // inserto correctamente
-                        registroExitoso = true;
+                        result.Correct = true;
                     }
                     else
                     {
                         // Ocurrio un error
+                        result.Correct = false;
+                        result.ErrorMessage = "Ocurrio un error al insertar al usuario";
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
             }
 
-            return registroExitoso;
+            return result;
         }
 
 

@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BL
+{
+    public class Materia
+    {
+
+        public static ML.Result Delete(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
+                {
+                    context.Open();
+
+                    string query = "DELETE FROM Materia WHERE IdMateria = @IdMateria";
+
+                    //SqlCommand cmd = new SqlCommand(query, context);
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.CommandText = query;
+                    cmd.Connection = context;
+
+                    cmd.Parameters.AddWithValue("@IdMateria", IdMateria);
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+
+                    if(filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar la materia";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+
+        public static ML.Result GetAll()
+        {
+            ML.Result result = new ML.Result();
+
+            result.Objects = new List<object>();
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
+                {
+                    string query = "SELECT IdMateria, Nombre, Descripcion, Creditos FROM Materia";
+
+                    SqlCommand command = new SqlCommand(query, context);
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                    if(dataTable.Rows.Count > 0)
+                    {
+                        
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            ML.Materia materia = new ML.Materia();
+
+                            materia.IdMateria =  Convert.ToInt32(row[0]);
+                            materia.Nombre =  row[1].ToString();
+                            materia.Descripcion =  row[2].ToString();
+                            materia.Creditos =  Convert.ToDecimal(row[3]);
+
+                            result.Objects.Add(materia);
+                        }
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Ocurrio un error al consultar los datos";
+                    }               
+                }
+            } catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+        public static ML.Result Add(ML.Materia materia)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
+                {
+                    SqlCommand command = new SqlCommand("MateriaAdd", context);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Nombre", materia.Nombre);
+                    command.Parameters.AddWithValue("@Descripcion", materia.Descripcion);
+                    command.Parameters.AddWithValue("@Creditos", materia.Creditos);
+
+                    context.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    if(rowsAffected > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo agregar el registro";
+                    }
+
+                }
+
+            }catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex; 
+            }
+
+            return result;
+        }
+
+    }
+}

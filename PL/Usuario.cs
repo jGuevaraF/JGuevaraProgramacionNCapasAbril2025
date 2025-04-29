@@ -8,7 +8,7 @@ namespace PL
 {
     public class Usuario
     {
-        public void Add()
+        public static void Add()
         {
             ML.Usuario usuario = new ML.Usuario();
             Console.WriteLine("Dame el nombre del Usuario: ");
@@ -17,19 +17,20 @@ namespace PL
             Console.WriteLine("Dame el correo");
             usuario.Correo = Console.ReadLine();
 
-            bool registroExitoso = BL.Usuario.Add(usuario);
+            ML.Result registroExitoso = BL.Usuario.Add(usuario);
 
-            if (registroExitoso)
+            if (registroExitoso.Correct)
             {
                 Console.WriteLine("Se agrego correctamente");
             }
             else
             {
+                Console.WriteLine(registroExitoso.ErrorMessage);
                 Console.WriteLine("No se pudo agregar al usuario.");
             }
         }
 
-
+        // 
 
         public static void Delete()
         {

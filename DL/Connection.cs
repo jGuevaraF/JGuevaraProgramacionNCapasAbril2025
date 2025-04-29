@@ -10,8 +10,9 @@ namespace DL
     {
         public static string GetConnection()
         {
-            string conexion = "Data Source=.;Initial Catalog=JGuevaraProgramacionNCapasAbril2025;User ID=sa;Password=pass@word1;Encrypt=False";
-
+            //string conexion = "Data Source=.;Initial Catalog=JGuevaraProgramacionNCapasAbril2025;User ID=sa;Password=pass@word1;Encrypt=False";
+            string conexion = "Data Source=.;Initial Catalog=OArredondoProgramacionNCapasAbril;User ID=sa;Password=pass@word1;Encrypt=False";
+            
             return conexion;
         }
     }
