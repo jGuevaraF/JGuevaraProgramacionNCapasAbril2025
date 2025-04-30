@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +75,29 @@ namespace PL
                 Console.WriteLine("Error al insertar: "+resultAdd.ErrorMessage);
             }
 
+        }
+
+        public static void GetAllLINQ()
+        {
+            ML.Result resultGetAll = BL.Materia.GetAllLINQ();
+
+            if (resultGetAll.Correct)
+            {
+                foreach (ML.Materia materia in resultGetAll.Objects)
+                {
+                    Console.WriteLine("Id: "+materia.IdMateria+" Nombre: "+materia.Nombre+" Descripción: "+materia.Descripcion+" Creditos: "+materia.Creditos);
+                }
+            }
+        }
+
+        public static void DeleteLINQ(int IdMateria)
+        {
+            ML.Result resultDelete = BL.Materia.DeleteLINQ(IdMateria);
+
+            if (resultDelete.Correct)
+            {
+                Console.WriteLine("La materia se elimino");
+            }
         }
 
     }

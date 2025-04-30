@@ -32,7 +32,7 @@ namespace BL
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
 
-                    if(filasAfectadas > 0)
+                    if (filasAfectadas > 0)
                     {
                         result.Correct = true;
                     }
@@ -69,17 +69,17 @@ namespace BL
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
 
-                    if(dataTable.Rows.Count > 0)
+                    if (dataTable.Rows.Count > 0)
                     {
-                        
+
                         foreach (DataRow row in dataTable.Rows)
                         {
                             ML.Materia materia = new ML.Materia();
 
-                            materia.IdMateria =  Convert.ToInt32(row[0]);
-                            materia.Nombre =  row[1].ToString();
-                            materia.Descripcion =  row[2].ToString();
-                            materia.Creditos =  Convert.ToDecimal(row[3]);
+                            materia.IdMateria = Convert.ToInt32(row[0]);
+                            materia.Nombre = row[1].ToString();
+                            materia.Descripcion = row[2].ToString();
+                            materia.Creditos = Convert.ToDecimal(row[3]);
 
                             result.Objects.Add(materia);
                         }
@@ -89,9 +89,10 @@ namespace BL
                     {
                         result.Correct = false;
                         result.ErrorMessage = "Ocurrio un error al consultar los datos";
-                    }               
+                    }
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
@@ -118,7 +119,7 @@ namespace BL
                     context.Open();
                     int rowsAffected = command.ExecuteNonQuery();
 
-                    if(rowsAffected > 0)
+                    if (rowsAffected > 0)
                     {
                         result.Correct = true;
                     }
@@ -130,11 +131,12 @@ namespace BL
 
                 }
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
-                result.Ex = ex; 
+                result.Ex = ex;
             }
 
             return result;
@@ -158,7 +160,7 @@ namespace BL
 
                     int filasAfectadas = cmd.ExecuteNonQuery();
 
-                    if(filasAfectadas > 0)
+                    if (filasAfectadas > 0)
                     {
                         result.Correct = true;
                     }
@@ -168,7 +170,8 @@ namespace BL
                         result.ErrorMessage = "No se pudo eliminar la materia";
                     }
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
@@ -186,7 +189,7 @@ namespace BL
             {
                 using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
                 {
-                    DL_EF.Materia materia = new DL_EF.Materia();  
+                    DL_EF.Materia materia = new DL_EF.Materia();
                     materia.Nombre = Materia.Nombre;
                     materia.Descripcion = Materia.Descripcion;
                     materia.Creditos = Materia.Creditos;
@@ -194,22 +197,142 @@ namespace BL
                     //INSERT INTO Materia VALUES ()
                     int filasAfectadas = context.SaveChanges();
 
-                    if(filasAfectadas > 0)
+                    if (filasAfectadas > 0)
                     {
                         result.Correct = true;
-                    } else
+                    }
+                    else
                     {
-                        result.Correct =false;
+                        result.Correct = false;
                         result.ErrorMessage = "No se inserto";
                     }
-                  
+
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
-                result.ErrorMessage= ex.Message;
+                result.ErrorMessage = ex.Message;
                 result.Ex = ex;
             }
+            return result;
+        }
+
+        public static ML.Result GetAllLINQ()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+
+                    var query = (
+                                    from materia in context.Materias
+                                    select new
+                                    {
+                                        IdMateria = materia.IdMateria,
+                                        Nombre = materia.Nombre,
+                                        Descripcion = materia.Descripcion,
+                                        Creditos = materia.Creditos,
+                                        IdSemestre = materia.IdSemestre
+                                    }
+                                ).ToList();
+
+                    if (query.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var itemMateria in query)
+                        {
+                            ML.Materia materia = new ML.Materia();
+                            materia.IdMateria = itemMateria.IdMateria;
+
+                            //ternario
+
+                            materia.Nombre = itemMateria.Nombre == null ? "" : itemMateria.Nombre;
+                            if (itemMateria.Nombre == null)
+                            {
+                                materia.Nombre = "";
+                            }
+                            else
+                            {
+                                materia.Nombre = itemMateria.Nombre;
+
+                            }
+
+                            if(itemMateria.IdSemestre == null)
+                            {
+                                materia.IdSemestre = 0;
+                            } else
+                            {
+
+                                materia.IdSemestre = itemMateria.IdSemestre.Value; //int? null
+                            }
+
+
+                            materia.Descripcion = itemMateria.Descripcion;
+                            materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
+
+                            result.Objects.Add(materia);
+                        }
+
+                        result.Correct = true;
+
+                    }
+                    else
+                    {
+                        result.ErrorMessage = "No se encontro información";
+                        result.Correct = false;
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result DeleteLINQ(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+
+                    var materiaGet = (from materia in context.Materias
+                                 where materia.IdMateria == IdMateria
+                                 select materia).SingleOrDefault();
+
+                    if(materiaGet != null)
+                    {
+                        context.Materias.Remove(materiaGet);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        result.ErrorMessage = "No se encontro la materia";
+                        result.Correct = false;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.Message;
+                result.Ex = e;
+            }
+
             return result;
         }
 
