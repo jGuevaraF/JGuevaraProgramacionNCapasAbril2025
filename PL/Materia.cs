@@ -16,15 +16,16 @@ namespace PL
             Console.WriteLine("Ingresa el ID de la materia: ");
             int IdMateria = Convert.ToInt32(Console.ReadLine());
 
-            ML.Result result = BL.Materia.Delete(IdMateria);
+            //ML.Result result = BL.Materia.Delete(IdMateria);
+            ML.Result resultDelete = BL.Materia.DeleteSP(IdMateria);
 
-            if (result.Correct) 
+            if (resultDelete.Correct) 
             {
                 Console.WriteLine("Se elimino correctamente");
             }
             else
             {
-                Console.WriteLine(result.ErrorMessage);
+                Console.WriteLine(resultDelete.ErrorMessage);
             }
         }
 
@@ -61,7 +62,8 @@ namespace PL
             Console.WriteLine("Creditos");
             materia.Creditos = Convert.ToDecimal(Console.ReadLine());
 
-            ML.Result resultAdd = BL.Materia.Add(materia);
+            //ML.Result resultAdd = BL.Materia.Add(materia);
+            ML.Result resultAdd = BL.Materia.AddEF(materia);
 
             if (resultAdd.Correct)
             {

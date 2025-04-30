@@ -140,5 +140,78 @@ namespace BL
             return result;
         }
 
+
+        public static ML.Result DeleteSP(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Connection.GetConnection()))
+                {
+                    SqlCommand cmd = new SqlCommand("MateriaDelete", context);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@IdMateria", IdMateria);
+
+                    context.Open();
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+
+                    if(filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar la materia";
+                    }
+                }
+            }catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
+
+
+        public static ML.Result AddEF(ML.Materia Materia)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    DL_EF.Materia materia = new DL_EF.Materia();  
+                    materia.Nombre = Materia.Nombre;
+                    materia.Descripcion = Materia.Descripcion;
+                    materia.Creditos = Materia.Creditos;
+                    context.Materias.Add(materia);
+                    //INSERT INTO Materia VALUES ()
+                    int filasAfectadas = context.SaveChanges();
+
+                    if(filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    } else
+                    {
+                        result.Correct =false;
+                        result.ErrorMessage = "No se inserto";
+                    }
+                  
+                }
+            } catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage= ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
     }
 }
