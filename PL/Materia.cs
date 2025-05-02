@@ -30,12 +30,12 @@ namespace PL
             }
         }
 
-
+       
  
 
         public static void GetAll()
         {
-            ML.Result result = BL.Materia.GetAll();
+            ML.Result result = BL.Materia.GetAllSP();
 
             if (result.Correct)
             {
@@ -45,6 +45,8 @@ namespace PL
                     Console.WriteLine(materiaDB.Nombre);
                     Console.WriteLine(materiaDB.Descripcion);
                     Console.WriteLine(materiaDB.Creditos);
+                    Console.WriteLine(materiaDB.Semestre.IdSemestre);
+                    Console.WriteLine(materiaDB.Semestre.Descripcion);
                 }
             }
             else
@@ -77,18 +79,20 @@ namespace PL
 
         }
 
-        public static void GetAllLINQ()
-        {
-            ML.Result resultGetAll = BL.Materia.GetAllLINQ();
+        //public static void GetAllLINQ()
+        //{
+        //    ML.Result resultGetAll = BL.Materia.GetAllLINQ();
 
-            if (resultGetAll.Correct)
-            {
-                foreach (ML.Materia materia in resultGetAll.Objects)
-                {
-                    Console.WriteLine("Id: "+materia.IdMateria+" Nombre: "+materia.Nombre+" Descripción: "+materia.Descripcion+" Creditos: "+materia.Creditos);
-                }
-            }
-        }
+        //    if (resultGetAll.Correct)
+        //    {
+        //        foreach (ML.Materia materia in resultGetAll.Objects)
+        //        {
+        //            Console.WriteLine("Id: "+materia.IdMateria+" Nombre: "+materia.Nombre+" Descripción: "+materia.Descripcion+" Creditos: "+materia.Creditos);
+        //        }
+        //    }
+        //}
+
+
 
         public static void DeleteLINQ(int IdMateria)
         {

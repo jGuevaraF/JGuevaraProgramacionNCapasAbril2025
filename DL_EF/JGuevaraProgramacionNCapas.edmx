@@ -20,7 +20,7 @@
             <PropertyRef Name="IdSemestre" />
           </Key>
           <Property Name="IdSemestre" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Descripcion" Type="varchar" MaxLength="1" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_IdSememstre">
           <End Role="Semestre" Type="Self.Semestre" Multiplicity="0..1" />
@@ -42,6 +42,7 @@
         <Function Name="MateriaDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdMateria" Type="int" Mode="In" />
         </Function>
+        <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriModelStoreContainer">
           <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semestre" EntityType="Self.Semestre" Schema="dbo" store:Type="Tables" />
@@ -59,7 +60,7 @@
             <PropertyRef Name="IdSemestre" />
           </Key>
           <Property Name="IdSemestre" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Materias" Relationship="JGuevaraProgramacionNCapasAbriModel.FK_IdSememstre" FromRole="Semestre" ToRole="Materia" />
         </EntityType>
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriEntities" annotation:LazyLoadingEnabled="true">
@@ -77,6 +78,7 @@
             <End Role="Semestre" EntitySet="Semestres" />
             <End Role="Materia" EntitySet="Materias" />
           </AssociationSet>
+          <FunctionImport Name="MateriaGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result)" />
         </EntityContainer>
         <EntityType Name="Materia">
           <Key>
@@ -101,6 +103,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="MateriaGetAll_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="Creditos" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="IdSemestre" Nullable="true" />
+          <Property Type="String" Name="Semestre" Nullable="true" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -128,6 +138,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MateriaGetAll" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Creditos" ColumnName="Creditos" />
+                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
+                <ScalarProperty Name="Semestre" ColumnName="Semestre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

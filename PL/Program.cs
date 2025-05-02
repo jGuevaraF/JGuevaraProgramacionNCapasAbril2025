@@ -10,9 +10,7 @@ namespace PL
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Ingresa Id");
-            int IdMateria = Convert.ToInt16(Console.ReadLine());
-            PL.Materia.DeleteLINQ(IdMateria);
+            Materia.GetAll();
         }
     }
 }

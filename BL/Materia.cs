@@ -218,86 +218,86 @@ namespace BL
             return result;
         }
 
-        public static ML.Result GetAllLINQ()
-        {
-            ML.Result result = new ML.Result();
+        //public static ML.Result GetAllLINQ()
+        //{
+        //    ML.Result result = new ML.Result();
 
-            try
-            {
+        //    try
+        //    {
 
-                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
-                {
+        //        using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+        //        {
 
-                    var query = (
-                                    from materia in context.Materias
-                                    select new
-                                    {
-                                        IdMateria = materia.IdMateria,
-                                        Nombre = materia.Nombre,
-                                        Descripcion = materia.Descripcion,
-                                        Creditos = materia.Creditos,
-                                        IdSemestre = materia.IdSemestre
-                                    }
-                                ).ToList();
+        //            var query = (
+        //                            from materia in context.Materias
+        //                            select new
+        //                            {
+        //                                IdMateria = materia.IdMateria,
+        //                                Nombre = materia.Nombre,
+        //                                Descripcion = materia.Descripcion,
+        //                                Creditos = materia.Creditos,
+        //                                IdSemestre = materia.IdSemestre
+        //                            }
+        //                        ).ToList();
 
-                    if (query.Count > 0)
-                    {
-                        result.Objects = new List<object>();
-                        foreach (var itemMateria in query)
-                        {
-                            ML.Materia materia = new ML.Materia();
-                            materia.IdMateria = itemMateria.IdMateria;
+        //            if (query.Count > 0)
+        //            {
+        //                result.Objects = new List<object>();
+        //                foreach (var itemMateria in query)
+        //                {
+        //                    ML.Materia materia = new ML.Materia();
+        //                    materia.IdMateria = itemMateria.IdMateria;
 
-                            //ternario
+        //                    //ternario
 
-                            materia.Nombre = itemMateria.Nombre == null ? "" : itemMateria.Nombre;
-                            if (itemMateria.Nombre == null)
-                            {
-                                materia.Nombre = "";
-                            }
-                            else
-                            {
-                                materia.Nombre = itemMateria.Nombre;
+        //                    materia.Nombre = itemMateria.Nombre == null ? "" : itemMateria.Nombre;
+        //                    if (itemMateria.Nombre == null)
+        //                    {
+        //                        materia.Nombre = "";
+        //                    }
+        //                    else
+        //                    {
+        //                        materia.Nombre = itemMateria.Nombre;
 
-                            }
+        //                    }
 
-                            if(itemMateria.IdSemestre == null)
-                            {
-                                materia.IdSemestre = 0;
-                            } else
-                            {
+        //                    if(itemMateria.IdSemestre == null)
+        //                    {
+        //                        materia.IdSemestre = 0;
+        //                    } else
+        //                    {
 
-                                materia.IdSemestre = itemMateria.IdSemestre.Value; //int? null
-                            }
+        //                        materia.IdSemestre = itemMateria.IdSemestre.Value; //int? null
+        //                    }
 
 
-                            materia.Descripcion = itemMateria.Descripcion;
-                            materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
+        //                    materia.Descripcion = itemMateria.Descripcion;
+        //                    materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
 
-                            result.Objects.Add(materia);
-                        }
+        //                    result.Objects.Add(materia);
+        //                }
 
-                        result.Correct = true;
+        //                result.Correct = true;
 
-                    }
-                    else
-                    {
-                        result.ErrorMessage = "No se encontro información";
-                        result.Correct = false;
-                    }
+        //            }
+        //            else
+        //            {
+        //                result.ErrorMessage = "No se encontro información";
+        //                result.Correct = false;
+        //            }
 
-                }
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                result.Correct = false;
-                result.ErrorMessage = e.Message;
-                result.Ex = e;
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        result.Correct = false;
+        //        result.ErrorMessage = e.Message;
+        //        result.Ex = e;
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public static ML.Result DeleteLINQ(int IdMateria)
         {
@@ -321,6 +321,56 @@ namespace BL
                     else
                     {
                         result.ErrorMessage = "No se encontro la materia";
+                        result.Correct = false;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                result.Correct = false;
+                result.ErrorMessage = e.Message;
+                result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetAllSP()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    var materiaList = context.MateriaGetAll().ToList();
+
+                    if (materiaList.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var itemMateria in materiaList)
+                        {
+                            ML.Materia materia = new ML.Materia();
+                            materia.Semestre = new ML.Semestre();
+
+                            materia.IdMateria = itemMateria.IdMateria;
+                            materia.Nombre = itemMateria.Nombre;
+                            materia.Descripcion = itemMateria.Descripcion;
+                            materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
+                            materia.Semestre.IdSemestre = (int) itemMateria.IdSemestre;
+                            materia.Semestre.Descripcion = itemMateria.Semestre;
+
+
+
+                            result.Objects.Add(materia);
+                        }
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.ErrorMessage = "SIn resultados";
                         result.Correct = false;
                     }
                 }
