@@ -180,6 +180,35 @@ namespace BL
             return result;
         }
 
+        public static ML.Result AddEFSP(ML.Materia Materia)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    int filasAfectadas = context.MateriaAdd(Materia.Nombre, Materia.Descripcion, Materia.Creditos, Materia.Semestre.IdSemestre);
+
+                    if (filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo agregar la materia.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
 
 
         public static ML.Result AddEF(ML.Materia Materia)

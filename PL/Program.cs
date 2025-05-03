@@ -10,7 +10,7 @@ namespace PL
     {
         static void Main(string[] args)
         {
-            Materia.GetAll();
+            Materia.Add();
         }
     }
 }

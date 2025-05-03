@@ -30,7 +30,21 @@ namespace DL_EF
         public virtual DbSet<Semestre> Semestres { get; set; }
         public virtual DbSet<Materia> Materias { get; set; }
     
-        public virtual int MateriaAdd(string nombre, string descripcion, Nullable<decimal> creditos)
+        public virtual int MateriaDelete(Nullable<int> idMateria)
+        {
+            var idMateriaParameter = idMateria.HasValue ?
+                new ObjectParameter("IdMateria", idMateria) :
+                new ObjectParameter("IdMateria", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaDelete", idMateriaParameter);
+        }
+    
+        public virtual ObjectResult<MateriaGetAll_Result> MateriaGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetAll_Result>("MateriaGetAll");
+        }
+    
+        public virtual int MateriaAdd(string nombre, string descripcion, Nullable<decimal> creditos, Nullable<int> idSemestre)
         {
             var nombreParameter = nombre != null ?
                 new ObjectParameter("Nombre", nombre) :
@@ -44,21 +58,11 @@ namespace DL_EF
                 new ObjectParameter("Creditos", creditos) :
                 new ObjectParameter("Creditos", typeof(decimal));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaAdd", nombreParameter, descripcionParameter, creditosParameter);
-        }
+            var idSemestreParameter = idSemestre.HasValue ?
+                new ObjectParameter("IdSemestre", idSemestre) :
+                new ObjectParameter("IdSemestre", typeof(int));
     
-        public virtual int MateriaDelete(Nullable<int> idMateria)
-        {
-            var idMateriaParameter = idMateria.HasValue ?
-                new ObjectParameter("IdMateria", idMateria) :
-                new ObjectParameter("IdMateria", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaDelete", idMateriaParameter);
-        }
-    
-        public virtual ObjectResult<MateriaGetAll_Result> MateriaGetAll()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetAll_Result>("MateriaGetAll");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaAdd", nombreParameter, descripcionParameter, creditosParameter, idSemestreParameter);
         }
     }
 }

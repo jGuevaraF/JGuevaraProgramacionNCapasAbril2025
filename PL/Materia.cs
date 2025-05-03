@@ -40,7 +40,7 @@ namespace PL
             if (result.Correct)
             {
                 foreach (ML.Materia materiaDB in result.Objects)
-                {
+                {                   
                     Console.WriteLine(materiaDB.IdMateria);
                     Console.WriteLine(materiaDB.Nombre);
                     Console.WriteLine(materiaDB.Descripcion);
@@ -58,15 +58,21 @@ namespace PL
         public static void Add()
         {
             ML.Materia materia = new ML.Materia();
+            materia.Semestre = new ML.Semestre();
+
             Console.WriteLine("Ingresa nombre");
             materia.Nombre = Console.ReadLine();
             Console.WriteLine("Descripción");
             materia.Descripcion = Console.ReadLine();
             Console.WriteLine("Creditos");
             materia.Creditos = Convert.ToDecimal(Console.ReadLine());
+            Console.WriteLine("Ingresa el ID semetres");
+            materia.Semestre.IdSemestre = Convert.ToInt32(Console.ReadLine());
+
 
             //ML.Result resultAdd = BL.Materia.Add(materia);
-            ML.Result resultAdd = BL.Materia.AddEF(materia);
+            //ML.Result resultAdd = BL.Materia.AddEF(materia);
+            ML.Result resultAdd = BL.Materia.AddEFSP(materia);
 
             if (resultAdd.Correct)
             {

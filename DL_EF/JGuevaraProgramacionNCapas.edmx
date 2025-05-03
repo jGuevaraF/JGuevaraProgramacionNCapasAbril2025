@@ -38,6 +38,7 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Descripcion" Type="varchar" Mode="In" />
           <Parameter Name="Creditos" Type="decimal" Mode="In" />
+          <Parameter Name="IdSemestre" Type="int" Mode="In" />
         </Function>
         <Function Name="MateriaDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdMateria" Type="int" Mode="In" />
@@ -65,11 +66,6 @@
         </EntityType>
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Semestres" EntityType="Self.Semestre" />
-          <FunctionImport Name="MateriaAdd">
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="Descripcion" Mode="In" Type="String" />
-            <Parameter Name="Creditos" Mode="In" Type="Decimal" />
-          </FunctionImport>
           <FunctionImport Name="MateriaDelete">
           <Parameter Name="IdMateria" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -79,6 +75,12 @@
             <End Role="Materia" EntitySet="Materias" />
           </AssociationSet>
           <FunctionImport Name="MateriaGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result)" />
+          <FunctionImport Name="MateriaAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Creditos" Mode="In" Type="Decimal" />
+            <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Materia">
           <Key>
@@ -125,7 +127,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="MateriaAdd" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaAdd" />
           <FunctionImportMapping FunctionImportName="MateriaDelete" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaDelete" />
           <EntitySetMapping Name="Materias">
             <EntityTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.Materia">
@@ -150,6 +151,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MateriaAdd" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaAdd" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
