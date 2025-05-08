@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BL
@@ -260,7 +261,7 @@ namespace BL
                 using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
                 {
                     int FilasAfectadas = context.MateriaDelete(IdMateria);
-                    if(FilasAfectadas > 0)
+                    if (FilasAfectadas > 0)
                     {
                         result.Correct = true;
                     }
@@ -372,10 +373,10 @@ namespace BL
                 {
 
                     var materiaGet = (from materia in context.Materias
-                                 where materia.IdMateria == IdMateria
-                                 select materia).SingleOrDefault();
+                                      where materia.IdMateria == IdMateria
+                                      select materia).SingleOrDefault();
 
-                    if(materiaGet != null)
+                    if (materiaGet != null)
                     {
                         context.Materias.Remove(materiaGet);
                         context.SaveChanges();
@@ -421,7 +422,7 @@ namespace BL
                             materia.Nombre = itemMateria.Nombre;
                             materia.Descripcion = itemMateria.Descripcion;
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
-                            materia.Semestre.IdSemestre = (int) itemMateria.IdSemestre;
+                            materia.Semestre.IdSemestre = (int)itemMateria.IdSemestre;
                             materia.Semestre.Nombre = itemMateria.Semestre;
 
 
@@ -443,6 +444,91 @@ namespace BL
                 result.Correct = false;
                 result.ErrorMessage = e.Message;
                 result.Ex = e;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetById(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    var query = (from materia in context.Materias
+                                 where materia.IdMateria == IdMateria
+                                 select new
+                                 {
+                                     IdMateria = materia.IdMateria,
+                                     Nombre = materia.Nombre,
+                                     Descripcion = materia.Descripcion,
+                                     Creditos = materia.Creditos,
+                                     IdSemestre = materia.IdSemestre,
+                                     Semestre = materia.Semestre
+                                 }).FirstOrDefault();
+
+                    if (query != null)
+                    {
+                        ML.Materia materia = new ML.Materia();
+                        materia.Semestre = new ML.Semestre();
+
+                        materia.IdMateria = query.IdMateria;
+                        materia.Nombre = query.Nombre;
+                        materia.Descripcion = query.Descripcion;
+                        materia.Creditos = Convert.ToDecimal(query.Creditos);
+                        materia.Semestre.IdSemestre = (int)query.IdSemestre;
+                        materia.Semestre.Nombre = query.Semestre.ToString();
+
+                        result.Object = materia;
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.ErrorMessage = e.Message;
+                result.Correct = false;
+                result.Ex = e;
+
+            }
+
+            return result;
+        }
+
+        public static ML.Result Update(ML.Materia materia)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    
+                    var query = (from materiaDB in context.Materias
+                                 where materiaDB.IdMateria == materia.IdMateria
+                                 select materiaDB).FirstOrDefault();
+
+                    if (query != null)
+                    {
+
+                        query.Nombre = materia.Nombre;
+                        query.Descripcion = materia.Descripcion;
+                        query.Creditos = materia.Creditos;
+
+                        context.SaveChanges();
+
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.ErrorMessage = e.Message;
+                result.Correct = false;
+                result.Ex = e;
+
             }
 
             return result;

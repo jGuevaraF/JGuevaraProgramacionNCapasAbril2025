@@ -25,28 +25,45 @@ namespace PL_MVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult Form()
+        public ActionResult Form(int IdMateria)
         {
             ML.Materia materia = new ML.Materia();
+
+            if (IdMateria > 0)
+            {
+                ML.Result result = BL.Materia.GetById(IdMateria);
+                materia = (ML.Materia)result.Object;
+            }
+
             return View(materia);
         }
 
+
         [HttpPost]
-        public ActionResult Form(ML.Materia materia) { 
-        
+        public ActionResult Form(ML.Materia materia)
+        {
 
-            materia.Semestre = new ML.Semestre();
+            if (materia.IdMateria > 0)
+            {
+                ML.Result result = BL.Materia.Update(materia);
+            }
+            else
+            {
+                materia.Semestre = new ML.Semestre();
 
-            materia.Semestre.IdSemestre = 19;
-            BL.Materia.AddEFSP(materia);
+                materia.Semestre.IdSemestre = 19;
+                BL.Materia.AddEFSP(materia);
 
-            // Redireccionar al GetAll
+                // Redireccionar al GetAll
 
-            //return View("GetAll");
+                //return View("GetAll");
+            }
+
+
             return RedirectToAction("GetAll");
         }
 
-        [HttpDelete]
+        [HttpGet]
         public ActionResult Delete(int IdMateria)
         {
             BL.Materia.DeleteEFSP(IdMateria);

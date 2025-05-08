@@ -16,7 +16,7 @@
             <h1 class="text-start">Agregar una materia</h1>
         </div>
         <div class="col-6 text-end">
-            <a href="@Url.Action("Form", "Materia")" class="btn btn-success"><i class="bi bi-plus-circle"></i></a>
+            <a href="@Url.Action("Form", "Materia", new {IdMateria = 0})" class="btn btn-success"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
 
@@ -43,11 +43,15 @@
                     {
                         <tr>
                             <td>
-                            <a href="@Url.Action("Delete","Materia", new { IdMateria = materia.IdMateria } )" class="btn btn-danger">
+                            <a href="@Url.Action("Delete","Materia", new { IdMateria = materia.IdMateria } )" class="btn btn-danger" onclick="return confirm('Realmente deseas eliminar la matera')">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
                             </td>
-                            <td><i class="bi bi-pencil-square"></i></td>
+                            <td>
+                                <a href="@Url.Action("Form", "Materia", new { IdMateria = materia.IdMateria })" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </td>
                             <td>@materia.IdMateria</td>
                             <td>@materia.Nombre</td>
                             <td>@materia.Descripcion</td>
