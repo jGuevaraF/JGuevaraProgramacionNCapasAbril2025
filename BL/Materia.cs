@@ -247,6 +247,39 @@ namespace BL
             return result;
         }
 
+
+
+
+
+        public static ML.Result DeleteEFSP(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    int FilasAfectadas = context.MateriaDelete(IdMateria);
+                    if(FilasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar la materia";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
         //public static ML.Result GetAllLINQ()
         //{
         //    ML.Result result = new ML.Result();
@@ -389,7 +422,7 @@ namespace BL
                             materia.Descripcion = itemMateria.Descripcion;
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
                             materia.Semestre.IdSemestre = (int) itemMateria.IdSemestre;
-                            materia.Semestre.Descripcion = itemMateria.Semestre;
+                            materia.Semestre.Nombre = itemMateria.Semestre;
 
 
 

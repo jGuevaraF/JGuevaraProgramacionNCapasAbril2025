@@ -1,0 +1,64 @@
+﻿@model ML.Materia
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Get All Materias</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <h1 class="text-start">Agregar una materia</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a href="@Url.Action("Form", "Materia")" class="btn btn-success"><i class="bi bi-plus-circle"></i></a>
+        </div>
+    </div>
+
+
+    <hr />
+
+    <div class="row">
+        <div class="col-12">
+
+            <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td>Eliminar</td>
+                        <td>Actualizar</td>
+                        <td>IdMateria</td>
+                        <td>Nombre</td>
+                        <td>Descripcion</td>
+                        <td>Creditos</td>
+                        <td>Semestre</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Materia materia in Model.Materias)
+                    {
+                        <tr>
+                            <td>
+                            <a href="@Url.Action("Delete","Materia", new { IdMateria = materia.IdMateria } )" class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                            </td>
+                            <td><i class="bi bi-pencil-square"></i></td>
+                            <td>@materia.IdMateria</td>
+                            <td>@materia.Nombre</td>
+                            <td>@materia.Descripcion</td>
+                            <td>@materia.Creditos</td>
+                            <td>@materia.Semestre.Nombre</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

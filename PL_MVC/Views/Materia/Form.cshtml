@@ -1,0 +1,53 @@
+﻿@model ML.Materia
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center">Agregar Materia</h1>
+
+        </div>
+    </div>
+
+    <div>
+        <i class="bi bi-trash3-fill"></i>
+    </div>
+
+    @using (Html.BeginForm("Form", "Materia", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-6">
+                @Html.LabelFor(model => model.IdMateria, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.IdMateria, new { @class = "form-control" })
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-6">
+                @Html.LabelFor(model => model.Descripcion, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control" })
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.Creditos, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Creditos, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div>
+            <button class="btn btn-success" type="submit">Guardar</button>
+        </div>
+    }
+</div>
+
