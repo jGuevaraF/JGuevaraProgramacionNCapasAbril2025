@@ -45,9 +45,35 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-12">
+                <input type="file" name="name" value="" onchange="CargarArchivo(event)" />
+                <img alt="Alternate Text" id="imgInput" style="width:100px" />
+            </div>
+        </div>
+
         <div>
             <button class="btn btn-success" type="submit">Guardar</button>
         </div>
     }
 </div>
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+<script>
+    var CargarArchivo = function (input) {
+        var img = input.target.files[0]
+
+        var reader = new FileReader()
+        reader.onload = function () {
+
+            var output = $('#imgInput')[0]
+            console.log(output)
+
+            //var outputJS = document.getElementById('imgInput')
+            //console.log(outputJS)
+            output.src = reader.result
+        }
+        reader.readAsDataURL(img)
+    }
+</script>
 

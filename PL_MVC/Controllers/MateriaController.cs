@@ -25,13 +25,13 @@ namespace PL_MVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult Form(int IdMateria)
+        public ActionResult Form(int? IdMateria)
         {
             ML.Materia materia = new ML.Materia();
 
             if (IdMateria > 0)
             {
-                ML.Result result = BL.Materia.GetById(IdMateria);
+                ML.Result result = BL.Materia.GetById(IdMateria.Value);
                 materia = (ML.Materia)result.Object;
             }
 

@@ -16,7 +16,7 @@
             <h1 class="text-start">Agregar una materia</h1>
         </div>
         <div class="col-6 text-end">
-            <a href="@Url.Action("Form", "Materia", new {IdMateria = 0})" class="btn btn-success"><i class="bi bi-plus-circle"></i></a>
+            <a href="@Url.Action("Form", "Materia")" class="btn btn-success"><i class="bi bi-plus-circle"></i></a>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
         <div class="col-12">
 
             <table class="table table-bordered">
-                    <thead>
+                <thead>
                     <tr>
                         <td>Eliminar</td>
                         <td>Actualizar</td>
@@ -43,9 +43,9 @@
                     {
                         <tr>
                             <td>
-                            <a href="@Url.Action("Delete","Materia", new { IdMateria = materia.IdMateria } )" class="btn btn-danger" onclick="return confirm('Realmente deseas eliminar la matera')">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
+                                <a href="@Url.Action("Delete","Materia", new { IdMateria = materia.IdMateria } )" class="btn btn-danger" onclick="return confirm('Realmente deseas eliminar la matera')">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
                             </td>
                             <td>
                                 <a href="@Url.Action("Form", "Materia", new { IdMateria = materia.IdMateria })" class="btn btn-warning">
@@ -63,6 +63,51 @@
             </table>
         </div>
     </div>
+
+    <div>
+        <input type="text" name="name" value="" id="input1"/>
+        <input type="text" name="inputName" value="" class="input1"/>
+        <input type="text" name="name" value="" id="input1" class="input1"/>
+    </div>
 </div>
+
+ @*Layout*@
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+<script>
+    // codigo de JS de JQuery
+
+    //JS
+    var input1 = document.getElementById('input1');
+    var input2 = document.getElementsByClassName('input1')
+    var input3 = document.getElementsByName('inputName')
+    console.log(input3)
+
+    //JQuery
+    let input1JQ = $('#input1')[0]
+    let input2JQ = $('.input1')
+    let input3JQ = $('[name=inputName]')
+    console.log(input3JQ)
+
+
+    var nuevoNombre = "Globlal" // Scope variables globales
+
+    function MostrarNombre() {
+        let nombre = "Erick"; // Dentro de la funcion.
+        console.log(nombre)
+    }
+
+    function Nombre() {
+       /* let nombre = "Omar"*/
+        console.log(nombre)
+        nombre = "VariableLET"
+        console.log(nombre)
+
+    }
+
+    MostrarNombre();
+    Nombre();
+
+</script>
 
 
