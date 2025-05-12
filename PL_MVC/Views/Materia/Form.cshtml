@@ -1,4 +1,5 @@
 ﻿@model ML.Materia
+
 @{
     ViewBag.Title = "Form";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -43,6 +44,12 @@
                 @Html.LabelFor(model => model.Creditos, new { @class = "form-label" })
                 @Html.TextBoxFor(model => model.Creditos, new { @class = "form-control" })
             </div>
+
+            <div>
+                @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
+                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), new {@class="form-control"})
+            </div>
+            
         </div>
 
         <div class="row">

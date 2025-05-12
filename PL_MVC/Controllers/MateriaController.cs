@@ -35,6 +35,15 @@ namespace PL_MVC.Controllers
                 materia = (ML.Materia)result.Object;
             }
 
+            materia.Semestre = new ML.Semestre();
+
+            ML.Result resultSemestre = BL.Materia.SemestreGetAll();
+
+            if (resultSemestre.Correct)
+            {
+               // materia.Semestre.Semestres = resultSemestre.Objects;
+            }
+
             return View(materia);
         }
 

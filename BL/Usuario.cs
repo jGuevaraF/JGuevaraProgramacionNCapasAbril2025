@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ML;
 
 namespace BL
 {
@@ -85,6 +86,8 @@ namespace BL
             }
             return usuarioEliminado;
         }
+
+        
 
     }
 }

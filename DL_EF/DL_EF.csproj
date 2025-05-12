@@ -76,6 +76,9 @@
     <Compile Include="Semestre.cs">
       <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
     </Compile>
+    <Compile Include="SemestreGetAll_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="JGuevaraProgramacionNCapas.edmx">

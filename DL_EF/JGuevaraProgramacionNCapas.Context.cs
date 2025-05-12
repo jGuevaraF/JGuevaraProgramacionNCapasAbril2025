@@ -64,5 +64,10 @@ namespace DL_EF
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaAdd", nombreParameter, descripcionParameter, creditosParameter, idSemestreParameter);
         }
+    
+        public virtual ObjectResult<SemestreGetAll_Result> SemestreGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SemestreGetAll_Result>("SemestreGetAll");
+        }
     }
 }

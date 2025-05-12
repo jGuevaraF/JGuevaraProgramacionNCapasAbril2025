@@ -44,6 +44,7 @@
           <Parameter Name="IdMateria" Type="int" Mode="In" />
         </Function>
         <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SemestreGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriModelStoreContainer">
           <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semestre" EntityType="Self.Semestre" Schema="dbo" store:Type="Tables" />
@@ -81,6 +82,7 @@
             <Parameter Name="Creditos" Mode="In" Type="Decimal" />
             <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="SemestreGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.SemestreGetAll_Result)" />
         </EntityContainer>
         <EntityType Name="Materia">
           <Key>
@@ -112,6 +114,10 @@
           <Property Type="Decimal" Name="Creditos" Nullable="true" Precision="10" Scale="2" />
           <Property Type="Int32" Name="IdSemestre" Nullable="true" />
           <Property Type="String" Name="Semestre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SemestreGetAll_Result">
+          <Property Type="Int32" Name="IdSemestre" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -152,6 +158,14 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MateriaAdd" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaAdd" />
+          <FunctionImportMapping FunctionImportName="SemestreGetAll" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.SemestreGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.SemestreGetAll_Result">
+                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -534,5 +534,46 @@ namespace BL
             return result;
         }
 
+        public static ML.Result SemestreGetAll()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+
+                    var query = context.SemestreGetAll().ToList();
+
+                    if (query.Count > 0)
+                    {
+
+                        result.Objects = new List<object>();
+                        foreach (var itemSemestre in query)
+                        {
+                            ML.Semestre semestre = new ML.Semestre();
+                            semestre.IdSemestre = itemSemestre.IdSemestre;
+                            semestre.Descripcion = itemSemestre.Descripcion;
+
+                            result.Objects.Add(semestre);
+                        }
+                        result.Correct = true;
+
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return result;
+        }
+
     }
 }
