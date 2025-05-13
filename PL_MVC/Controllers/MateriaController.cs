@@ -28,20 +28,21 @@ namespace PL_MVC.Controllers
         public ActionResult Form(int? IdMateria)
         {
             ML.Materia materia = new ML.Materia();
+            materia.Semestre = new ML.Semestre();
+
 
             if (IdMateria > 0)
             {
                 ML.Result result = BL.Materia.GetById(IdMateria.Value);
-                materia = (ML.Materia)result.Object;
+                materia = (ML.Materia)result.Object; //LINEA
             }
 
-            materia.Semestre = new ML.Semestre();
-
+            //materia.Semestre.IdSemestre = 0;
             ML.Result resultSemestre = BL.Materia.SemestreGetAll();
 
             if (resultSemestre.Correct)
             {
-               // materia.Semestre.Semestres = resultSemestre.Objects;
+                materia.Semestre.Semestres = resultSemestre.Objects;
             }
 
             return View(materia);

@@ -47,7 +47,10 @@
 
             <div>
                 @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
-                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), new {@class="form-control"})
+                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), "Selecciona un Semestre", new {@class="form-control"})
+
+
+                @Html.DropDownListFor(model => model.Semestre.IdSemestre , new SelectList(String.Empty), "Selecciona una opcion", new {@class="form-control"})
             </div>
             
         </div>
