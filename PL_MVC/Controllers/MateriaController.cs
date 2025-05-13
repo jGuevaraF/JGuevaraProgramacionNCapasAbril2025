@@ -36,12 +36,13 @@ namespace PL_MVC.Controllers
             }
 
             materia.Semestre = new ML.Semestre();
+            materia.Semestre.Grupo = new ML.Grupo();
 
             ML.Result resultSemestre = BL.Materia.SemestreGetAll();
 
             if (resultSemestre.Correct)
             {
-               // materia.Semestre.Semestres = resultSemestre.Objects;
+                materia.Semestre.Semestres = resultSemestre.Objects;
             }
 
             return View(materia);
@@ -78,6 +79,13 @@ namespace PL_MVC.Controllers
             BL.Materia.DeleteEFSP(IdMateria);
 
             return RedirectToAction("GetAll");
+        }
+
+        public JsonResult GetGrupoByIdSemestre(int IdSemestre)
+        {
+            ML.Result resultGrupos = BL.Grupo.GetByIdSemestre(IdSemestre);
+
+            return Json(resultGrupos, JsonRequestBehavior.AllowGet);
         }
 
     }

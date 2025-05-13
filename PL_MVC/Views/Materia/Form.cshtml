@@ -47,7 +47,13 @@
 
             <div>
                 @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
-                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), new {@class="form-control"})
+                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), 
+               "Seleccione un semestre", new {@class="form-control", @id = "ddlSemestre", @onchange = "FillGrupos()" })
+            </div>
+            <div>
+                @Html.LabelFor(model => model.Semestre.Grupo.IdGrupo)
+                @Html.DropDownListFor(model => model.Semestre.Grupo.IdGrupo, new SelectList(string.Empty, "IdGrupo", "Nombre"),
+               "Seleccione un grupo", new { @class = "form-control", @id = "ddlGrupo" })
             </div>
             
         </div>
@@ -59,9 +65,14 @@
             </div>
         </div>
 
+        <select>
+            <option value="">Texto</option>
+        </select>
+
         <div>
             <button class="btn btn-success" type="submit">Guardar</button>
         </div>
+
     }
 </div>
 
@@ -106,6 +117,40 @@
        
         return true;
     }
+
+
+</script>
+
+<script>
+    function FillGrupos() {
+        var IdSemestre = $('#ddlSemestre').val();
+    console.log(IdSemestre)
+
+    $.ajax({
+        url: '@Url.Action("GetGrupoByIdSemestre")',
+        dataType: 'JSON',
+        method: 'GET',
+        data: { IdSemestre },
+        success: function (resultGrupos) {
+            console.log(resultGrupos)
+            if (resultGrupos.Correct) {
+
+                $("#ddlGrupo").empty()
+                $("#ddlGrupo").append('<option value="">Seleccione un semestre</option>')
+
+                $.each(resultGrupos.Objects, function (i, grupo) {
+                    $("#ddlGrupo").append('<option value="'+ grupo.IdGrupo+'">'+grupo.Nombre+'</option>')
+                })
+            }
+
+        },
+        error: function(ex){
+            alert(ex)
+        }
+    })
+
+    }
+
 
 
 </script>

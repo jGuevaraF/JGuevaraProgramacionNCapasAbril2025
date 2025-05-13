@@ -11,6 +11,7 @@ namespace ML
         public int IdSemestre { get; set; }
         public string Descripcion { get; set; }
         public string Nombre { get; set; }
+        public ML.Grupo Grupo { get; set; }
         public List<object> Semestres { get; set; }
 
     }
