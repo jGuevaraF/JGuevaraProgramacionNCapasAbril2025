@@ -8,6 +8,8 @@
         <EntityTypeShape EntityType="JGuevaraProgramacionNCapasAbriModel.Semestre" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="JGuevaraProgramacionNCapasAbriModel.Materia" Width="1.5" PointX="3" PointY="1" />
         <AssociationConnector Association="JGuevaraProgramacionNCapasAbriModel.FK_IdSememstre" />
+        <EntityTypeShape EntityType="JGuevaraProgramacionNCapasAbriModel.Grupo" Width="1.5" PointX="0.75" PointY="5.5" />
+        <AssociationConnector Association="JGuevaraProgramacionNCapasAbriModel.FK__Semestre__IdGrup__2E1BDC42" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

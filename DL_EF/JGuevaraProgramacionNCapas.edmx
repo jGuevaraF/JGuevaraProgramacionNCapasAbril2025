@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="JGuevaraProgramacionNCapasAbriModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="Materia">
           <Key>
             <PropertyRef Name="IdMateria" />
@@ -21,7 +28,20 @@
           </Key>
           <Property Name="IdSemestre" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="IdGrupo" Type="int" />
         </EntityType>
+        <Association Name="FK__Semestre__IdGrup__2E1BDC42">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="0..1" />
+          <End Role="Semestre" Type="Self.Semestre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="Semestre">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_IdSememstre">
           <End Role="Semestre" Type="Self.Semestre" Multiplicity="0..1" />
           <End Role="Materia" Type="Self.Materia" Multiplicity="*" />
@@ -34,6 +54,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GrupoGetByIdSemestre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSemestre" Type="int" Mode="In" />
+        </Function>
         <Function Name="MateriaAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Descripcion" Type="varchar" Mode="In" />
@@ -46,8 +69,13 @@
         <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SemestreGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriModelStoreContainer">
+          <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semestre" EntityType="Self.Semestre" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Semestre__IdGrup__2E1BDC42" Association="Self.FK__Semestre__IdGrup__2E1BDC42">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="Semestre" EntitySet="Semestre" />
+          </AssociationSet>
           <AssociationSet Name="FK_IdSememstre" Association="Self.FK_IdSememstre">
             <End Role="Semestre" EntitySet="Semestre" />
             <End Role="Materia" EntitySet="Materia" />
@@ -64,6 +92,8 @@
           <Property Name="IdSemestre" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Materias" Relationship="JGuevaraProgramacionNCapasAbriModel.FK_IdSememstre" FromRole="Semestre" ToRole="Materia" />
+          <Property Name="IdGrupo" Type="Int32" />
+          <NavigationProperty Name="Grupo" Relationship="JGuevaraProgramacionNCapasAbriModel.FK__Semestre__IdGrup__2E1BDC42" FromRole="Semestre" ToRole="Grupo" />
         </EntityType>
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Semestres" EntityType="Self.Semestre" />
@@ -83,6 +113,14 @@
             <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SemestreGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.SemestreGetAll_Result)" />
+          <EntitySet Name="Grupoes" EntityType="JGuevaraProgramacionNCapasAbriModel.Grupo" />
+          <AssociationSet Name="FK__Semestre__IdGrup__2E1BDC42" Association="JGuevaraProgramacionNCapasAbriModel.FK__Semestre__IdGrup__2E1BDC42">
+            <End Role="Grupo" EntitySet="Grupoes" />
+            <End Role="Semestre" EntitySet="Semestres" />
+          </AssociationSet>
+          <FunctionImport Name="GrupoGetByIdSemestre" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.GrupoGetByIdSemestre_Result)">
+            <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Materia">
           <Key>
@@ -119,6 +157,30 @@
           <Property Type="Int32" Name="IdSemestre" Nullable="false" />
           <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Semestres" Relationship="JGuevaraProgramacionNCapasAbriModel.FK__Semestre__IdGrup__2E1BDC42" FromRole="Grupo" ToRole="Semestre" />
+        </EntityType>
+        <Association Name="FK__Semestre__IdGrup__2E1BDC42">
+          <End Type="JGuevaraProgramacionNCapasAbriModel.Grupo" Role="Grupo" Multiplicity="0..1" />
+          <End Type="JGuevaraProgramacionNCapasAbriModel.Semestre" Role="Semestre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="Semestre">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="GrupoGetByIdSemestre_Result">
+          <Property Type="Int32" Name="IdGrupo" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="20" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -128,6 +190,7 @@
           <EntitySetMapping Name="Semestres">
             <EntityTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.Semestre">
               <MappingFragment StoreEntitySet="Semestre">
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
                 <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
@@ -163,6 +226,22 @@
               <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.SemestreGetAll_Result">
                 <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Grupoes">
+            <EntityTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.Grupo">
+              <MappingFragment StoreEntitySet="Grupo">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GrupoGetByIdSemestre" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.GrupoGetByIdSemestre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.GrupoGetByIdSemestre_Result">
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

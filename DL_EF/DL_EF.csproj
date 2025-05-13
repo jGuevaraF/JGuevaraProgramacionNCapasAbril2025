@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Grupo.cs">
+      <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoGetByIdSemestre_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
+    </Compile>
     <Compile Include="JGuevaraProgramacionNCapas.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

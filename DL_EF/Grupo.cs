@@ -12,20 +12,18 @@ namespace DL_EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Semestre
+    public partial class Grupo
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Semestre()
+        public Grupo()
         {
-            this.Materias = new HashSet<Materia>();
+            this.Semestres = new HashSet<Semestre>();
         }
     
-        public int IdSemestre { get; set; }
-        public string Descripcion { get; set; }
-        public Nullable<int> IdGrupo { get; set; }
+        public int IdGrupo { get; set; }
+        public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Materia> Materias { get; set; }
-        public virtual Grupo Grupo { get; set; }
+        public virtual ICollection<Semestre> Semestres { get; set; }
     }
 }

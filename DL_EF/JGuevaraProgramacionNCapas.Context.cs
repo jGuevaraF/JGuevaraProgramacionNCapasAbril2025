@@ -29,6 +29,7 @@ namespace DL_EF
     
         public virtual DbSet<Semestre> Semestres { get; set; }
         public virtual DbSet<Materia> Materias { get; set; }
+        public virtual DbSet<Grupo> Grupoes { get; set; }
     
         public virtual int MateriaDelete(Nullable<int> idMateria)
         {
@@ -68,6 +69,15 @@ namespace DL_EF
         public virtual ObjectResult<SemestreGetAll_Result> SemestreGetAll()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SemestreGetAll_Result>("SemestreGetAll");
+        }
+    
+        public virtual ObjectResult<GrupoGetByIdSemestre_Result> GrupoGetByIdSemestre(Nullable<int> idSemestre)
+        {
+            var idSemestreParameter = idSemestre.HasValue ?
+                new ObjectParameter("IdSemestre", idSemestre) :
+                new ObjectParameter("IdSemestre", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GrupoGetByIdSemestre_Result>("GrupoGetByIdSemestre", idSemestreParameter);
         }
     }
 }
