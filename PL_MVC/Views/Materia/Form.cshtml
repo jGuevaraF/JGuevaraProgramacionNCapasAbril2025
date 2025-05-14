@@ -48,13 +48,16 @@
             <div>
                 @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
                 @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), 
-               "Seleccione un semestre", new {@class="form-control", @id = "ddlSemestre", @onchange = "FillGrupos()" })
+               "Seleccione un semestre", new {@class="form-control", @id = "ddlSemestre", @onchange = "FillMaterias()" })
             </div>
+
             <div>
-                @Html.LabelFor(model => model.Semestre.Grupo.IdGrupo)
-                @Html.DropDownListFor(model => model.Semestre.Grupo.IdGrupo, new SelectList(string.Empty, "IdGrupo", "Nombre"),
-               "Seleccione un grupo", new { @class = "form-control", @id = "ddlGrupo" })
+                @Html.LabelFor(model => model.IdMateria, new  { @class = "form-label" })
+                @Html.DropDownListFor(model => model.IdMateria, new SelectList(string.Empty),
+               "Selecciona una Materia", new {@class = "form-control", @id="ddlMateria" })
             </div>
+            
+
             
         </div>
 
@@ -149,6 +152,38 @@
         }
     })
 
+    }
+
+    function FillMaterias() {
+
+        var IdSemestre = $('#ddlSemestre').val();
+
+        console.log(IdSemestre)
+
+        $.ajax({
+            url: '@Url.Action("MateriaGetByIdSemestre")',
+            method: 'GET',
+            dataType: 'JSON',
+            data: { IdSemestre },
+            success: function (result) {
+                console.log(result)
+                if (result.Correct) {
+
+                    $("#ddlMateria").empty()
+                    $("#ddlMateria").append('<option value="">Selecciona una Materia</option>')
+
+                    $.each(result.Objects, function (i, materia) {
+                        $("#ddlMateria").append('<option value="' + materia.IdMateria + '">' + materia.Nombre + '</option>')
+                    })
+                }
+                else {
+                    alert(result.ErrorMessage)
+                }
+            },
+            error: function (ex) {
+                alert(ex)
+            }
+        })
     }
 
 

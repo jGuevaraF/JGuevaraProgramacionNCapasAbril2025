@@ -34,7 +34,7 @@ namespace PL_MVC.Controllers
             if (IdMateria > 0)
             {
                 ML.Result result = BL.Materia.GetById(IdMateria.Value);
-                materia = (ML.Materia)result.Object; //LINEA
+                materia = (ML.Materia)result.Object; 
             }
 
             materia.Semestre = new ML.Semestre();
@@ -89,6 +89,16 @@ namespace PL_MVC.Controllers
 
             return Json(resultGrupos, JsonRequestBehavior.AllowGet);
         }
+
+
+        public JsonResult MateriaGetByIdSemestre(int IdSemestre)
+        {
+            ML.Result resultMateria = BL.Materia.MAteriGetByIdSemestre(IdSemestre);
+
+            return Json(resultMateria, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

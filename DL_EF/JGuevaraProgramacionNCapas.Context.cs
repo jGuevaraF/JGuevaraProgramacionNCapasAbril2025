@@ -79,5 +79,14 @@ namespace DL_EF
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GrupoGetByIdSemestre_Result>("GrupoGetByIdSemestre", idSemestreParameter);
         }
+    
+        public virtual ObjectResult<MateriaGetByIdSemestre_Result> MateriaGetByIdSemestre(Nullable<int> idSemestre)
+        {
+            var idSemestreParameter = idSemestre.HasValue ?
+                new ObjectParameter("IdSemestre", idSemestre) :
+                new ObjectParameter("IdSemestre", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetByIdSemestre_Result>("MateriaGetByIdSemestre", idSemestreParameter);
+        }
     }
 }

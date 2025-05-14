@@ -575,5 +575,44 @@ namespace BL
             return result;
         }
 
+
+        public static ML.Result MAteriGetByIdSemestre(int IdSemestre)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    var query = context.MateriaGetByIdSemestre(IdSemestre).ToList();
+
+                    if(query.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var materiaDB in query)
+                        {
+                            ML.Materia materia = new ML.Materia();
+
+                            materia.IdMateria = materiaDB.IdMateria;
+                            materia.Nombre = materiaDB.Nombre;
+
+                            result.Objects.Add(materia);
+                        }
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Ocurrio un error al consultar los datos";
+                    }
+                }
+            } catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message; ;
+                result.Ex = ex;
+            }
+            return result;
+        }
+
     }
 }

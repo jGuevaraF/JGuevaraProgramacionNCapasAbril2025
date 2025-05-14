@@ -67,6 +67,9 @@
           <Parameter Name="IdMateria" Type="int" Mode="In" />
         </Function>
         <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MateriaGetByIdSemestre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSemestre" Type="int" Mode="In" />
+        </Function>
         <Function Name="SemestreGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="JGuevaraProgramacionNCapasAbriModelStoreContainer">
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
@@ -119,6 +122,9 @@
             <End Role="Semestre" EntitySet="Semestres" />
           </AssociationSet>
           <FunctionImport Name="GrupoGetByIdSemestre" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.GrupoGetByIdSemestre_Result)">
+          <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MateriaGetByIdSemestre" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetByIdSemestre_Result)">
             <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
@@ -181,6 +187,10 @@
           <Property Type="Int32" Name="IdGrupo" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="20" />
         </ComplexType>
+        <ComplexType Name="MateriaGetByIdSemestre_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -241,6 +251,14 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.GrupoGetByIdSemestre_Result">
                 <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MateriaGetByIdSemestre" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaGetByIdSemestre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetByIdSemestre_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
               </ComplexTypeMapping>
             </ResultMapping>
