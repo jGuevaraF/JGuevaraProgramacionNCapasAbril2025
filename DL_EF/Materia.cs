@@ -19,6 +19,7 @@ namespace DL_EF
         public string Descripcion { get; set; }
         public Nullable<decimal> Creditos { get; set; }
         public Nullable<int> IdSemestre { get; set; }
+        public byte[] Imagen { get; set; }
     
         public virtual Semestre Semestre { get; set; }
     }

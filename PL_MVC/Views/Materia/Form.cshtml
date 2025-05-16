@@ -19,7 +19,7 @@
         <i class="bi bi-trash3-fill"></i>
     </div>
 
-    @using (Html.BeginForm("Form", "Materia", FormMethod.Post))
+    @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="row">
             <div class="col-6">
@@ -32,7 +32,6 @@
                 @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
             </div>
         </div>
-
 
         <div class="row">
             <div class="col-6">
@@ -47,24 +46,23 @@
 
             <div>
                 @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
-                @Html.DropDownListFor(model=> model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"), 
-               "Seleccione un semestre", new {@class="form-control", @id = "ddlSemestre", @onchange = "FillMaterias()" })
+                @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"),
+               "Seleccione un semestre", new { @class = "form-control", @id = "ddlSemestre", @onchange = "FillMaterias()" })
             </div>
 
             <div>
-                @Html.LabelFor(model => model.IdMateria, new  { @class = "form-label" })
+                @Html.LabelFor(model => model.IdMateria, new { @class = "form-label" })
                 @Html.DropDownListFor(model => model.IdMateria, new SelectList(string.Empty),
-               "Selecciona una Materia", new {@class = "form-control", @id="ddlMateria" })
+               "Selecciona una Materia", new { @class = "form-control", @id = "ddlMateria" })
             </div>
-            
 
-            
-        </div>
 
-        <div class="row">
+
+        </div><div class="row">
             <div class="col-12">
-                <input type="file" name="name" value="" accept="image/*" onchange="CargarArchivo(event)" />
-                <img alt="Alternate Text" id="imgInput" style="width:100px" />
+                <input type="file" name="inptImgagenMateria" value="" accept="image/*" onchange="CargarArchivo(event)" />
+                <img alt="Alternate Text" src="~/Content/Imagenes/vector-users-icon.jpg" id="imgInput" style="width:100px" />
+
             </div>
         </div>
 
@@ -82,9 +80,9 @@
 <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 <script>
     var CargarArchivo = function (input) {
-        
+
         var img = input.target.files[0];
-        
+
         if (!validar(img.name)) {
             return 0;
         }
@@ -103,9 +101,9 @@
     }
 
     function validar(imgName) {
-        
+
         let extensions = ["png", "jpg", "jpeg"];
-       
+
         if (imgName == null) {
             alert("No se subio archivo");
             return false;
@@ -117,7 +115,7 @@
             alert("No es una extensión valida");
             return false;
         }
-       
+
         return true;
     }
 

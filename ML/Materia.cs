@@ -14,5 +14,6 @@ namespace ML
         public decimal Creditos { get; set; }
         public ML.Semestre Semestre { get; set; } //FK
         public List<object> Materias { get; set; }
+        public byte[] Imagen { get; set; }
     }
 }

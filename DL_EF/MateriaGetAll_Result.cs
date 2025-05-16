@@ -19,5 +19,6 @@ namespace DL_EF
         public Nullable<decimal> Creditos { get; set; }
         public Nullable<int> IdSemestre { get; set; }
         public string Semestre { get; set; }
+        public byte[] Imagen { get; set; }
     }
 }

@@ -40,32 +40,6 @@ namespace DL_EF
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaDelete", idMateriaParameter);
         }
     
-        public virtual ObjectResult<MateriaGetAll_Result> MateriaGetAll()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetAll_Result>("MateriaGetAll");
-        }
-    
-        public virtual int MateriaAdd(string nombre, string descripcion, Nullable<decimal> creditos, Nullable<int> idSemestre)
-        {
-            var nombreParameter = nombre != null ?
-                new ObjectParameter("Nombre", nombre) :
-                new ObjectParameter("Nombre", typeof(string));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            var creditosParameter = creditos.HasValue ?
-                new ObjectParameter("Creditos", creditos) :
-                new ObjectParameter("Creditos", typeof(decimal));
-    
-            var idSemestreParameter = idSemestre.HasValue ?
-                new ObjectParameter("IdSemestre", idSemestre) :
-                new ObjectParameter("IdSemestre", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaAdd", nombreParameter, descripcionParameter, creditosParameter, idSemestreParameter);
-        }
-    
         public virtual ObjectResult<SemestreGetAll_Result> SemestreGetAll()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SemestreGetAll_Result>("SemestreGetAll");
@@ -87,6 +61,40 @@ namespace DL_EF
                 new ObjectParameter("IdSemestre", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetByIdSemestre_Result>("MateriaGetByIdSemestre", idSemestreParameter);
+        }
+    
+        public virtual int MateriaAdd(string nombre, string descripcion, Nullable<decimal> creditos, string descripcionSemestre, byte[] imagen, Nullable<int> idGrupo)
+        {
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var creditosParameter = creditos.HasValue ?
+                new ObjectParameter("Creditos", creditos) :
+                new ObjectParameter("Creditos", typeof(decimal));
+    
+            var descripcionSemestreParameter = descripcionSemestre != null ?
+                new ObjectParameter("DescripcionSemestre", descripcionSemestre) :
+                new ObjectParameter("DescripcionSemestre", typeof(string));
+    
+            var imagenParameter = imagen != null ?
+                new ObjectParameter("Imagen", imagen) :
+                new ObjectParameter("Imagen", typeof(byte[]));
+    
+            var idGrupoParameter = idGrupo.HasValue ?
+                new ObjectParameter("IdGrupo", idGrupo) :
+                new ObjectParameter("IdGrupo", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MateriaAdd", nombreParameter, descripcionParameter, creditosParameter, descripcionSemestreParameter, imagenParameter, idGrupoParameter);
+        }
+    
+        public virtual ObjectResult<MateriaGetAll_Result> MateriaGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MateriaGetAll_Result>("MateriaGetAll");
         }
     }
 }

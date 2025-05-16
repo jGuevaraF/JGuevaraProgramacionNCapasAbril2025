@@ -187,8 +187,8 @@ namespace BL
             try
             {
                 using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
-                {
-                    int filasAfectadas = context.MateriaAdd(Materia.Nombre, Materia.Descripcion, Materia.Creditos, Materia.Semestre.IdSemestre);
+                { 
+                    int filasAfectadas = context.MateriaAdd(Materia.Nombre, Materia.Descripcion, Materia.Creditos, "", Materia.Imagen, 1 );
 
                     if (filasAfectadas > 0)
                     {
@@ -422,6 +422,7 @@ namespace BL
                             materia.Nombre = itemMateria.Nombre;
                             materia.Descripcion = itemMateria.Descripcion;
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
+                            materia.Imagen = itemMateria.Imagen;
                             materia.Semestre.IdSemestre = (int)itemMateria.IdSemestre;
                             materia.Semestre.Nombre = itemMateria.Semestre;
 

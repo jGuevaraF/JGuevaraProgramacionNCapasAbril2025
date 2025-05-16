@@ -1,6 +1,8 @@
 ﻿using Microsoft.Ajax.Utilities;
 using System;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace PL_MVC.Controllers
@@ -54,6 +56,22 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public ActionResult Form(ML.Materia materia)
         {
+            // arreglo de bytes => Byte []
+
+            HttpPostedFileBase inptImgagenMateria = Request.Files["inptImgagenMateria"];
+
+            using (Stream inputStream = inptImgagenMateria.InputStream)
+            {
+                MemoryStream memoryStream = inputStream as MemoryStream;
+                if (memoryStream == null)
+                {
+                    memoryStream = new MemoryStream();
+                    inputStream.CopyTo(memoryStream);
+                }
+                materia.Imagen = memoryStream.ToArray();
+            }
+
+
 
             if (materia.IdMateria > 0)
             {
@@ -70,8 +88,6 @@ namespace PL_MVC.Controllers
 
                 //return View("GetAll");
             }
-
-
             return RedirectToAction("GetAll");
         }
 

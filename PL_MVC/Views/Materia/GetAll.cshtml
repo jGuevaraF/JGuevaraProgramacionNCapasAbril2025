@@ -36,6 +36,7 @@
                         <td>Descripcion</td>
                         <td>Creditos</td>
                         <td>Semestre</td>
+                        <td>Inagen</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +58,12 @@
                             <td>@materia.Descripcion</td>
                             <td>@materia.Creditos</td>
                             <td>@materia.Semestre.Nombre</td>
+                            @if (materia.Imagen != null)
+                            {
+                                <td>
+                                    <img src="data:image/*;base64,@Convert.ToBase64String(@materia.Imagen)" />
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>
@@ -65,13 +72,13 @@
     </div>
 
     <div>
-        <input type="text" name="name" value="" id="input1"/>
-        <input type="text" name="inputName" value="" class="input1"/>
-        <input type="text" name="name" value="" id="input1" class="input1"/>
+        <input type="text" name="name" value="" id="input1" />
+        <input type="text" name="inputName" value="" class="input1" />
+        <input type="text" name="name" value="" id="input1" class="input1" />
     </div>
 </div>
 
- @*Layout*@
+@*Layout*@
 @Scripts.Render("~/bundles/jquery")
 <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 <script>
@@ -98,7 +105,7 @@
     }
 
     function Nombre() {
-       /* let nombre = "Omar"*/
+        /* let nombre = "Omar"*/
         console.log(nombre)
         nombre = "VariableLET"
         console.log(nombre)
