@@ -17,8 +17,10 @@ namespace PL_MVC.Controllers
             materia.Semestre = new ML.Semestre();
             ML.Result result = new ML.Result();
 
-            materia.Nombre = materia.Nombre ?? "";
-            materia.Nombre = materia.Nombre == null ? "": materia.Nombre;
+            //TODOS
+
+            materia.Nombre = "";
+            materia.Semestre.IdSemestre = 0;
 
             result = BL.Materia.GetAllSP(materia);
 
@@ -30,7 +32,7 @@ namespace PL_MVC.Controllers
                 {
                     materia.Semestre.Semestres = resultSemestres.Objects;
                 }
-                
+
             }
             return View(materia);
         }
@@ -38,23 +40,30 @@ namespace PL_MVC.Controllers
         [HttpPost]
         public ActionResult GetAll(ML.Materia Materia)
         {
-            ML.Materia materia = new ML.Materia();
-            materia.Semestre = new ML.Semestre();
+
+
+            //Materia.Nombre = Materia.Nombre == null ? "" : Materia.Nombre;
+            Materia.Nombre = Materia.Nombre ?? "";
+            ML.Result result = BL.Materia.GetAllSP(Materia);
 
             ML.Result resultSemestres = BL.Materia.SemestreGetAll();
             if (resultSemestres.Correct)
             {
-                materia.Semestre.Semestres = resultSemestres.Objects;
+                Materia.Semestre.Semestres = resultSemestres.Objects;
             }
 
-            ML.Result result = BL.Materia.GetAllSP(Materia);
 
             if (result.Correct)
             {
-                materia.Materias = result.Objects;
+                Materia.Materias = result.Objects;
             }
 
-            return View(materia);
+
+            Materia.Nombre = "";
+            Materia.Semestre.IdSemestre = 0;
+            //apellidos
+            //Rol.IdRol = 0
+            return View(Materia);
         }
 
         [HttpGet]
@@ -67,7 +76,7 @@ namespace PL_MVC.Controllers
             if (IdMateria > 0)
             {
                 ML.Result result = BL.Materia.GetByIdEFSP(IdMateria.Value);
-                materia = (ML.Materia)result.Object; 
+                materia = (ML.Materia)result.Object;
             }
 
             materia.Semestre = new ML.Semestre();
@@ -92,7 +101,7 @@ namespace PL_MVC.Controllers
             HttpPostedFileBase inptImgagenMateria = Request.Files["inptImgagenMateria"];
 
 
-            if(inptImgagenMateria.ContentLength > 0)
+            if (inptImgagenMateria.ContentLength > 0)
             {
                 using (Stream inputStream = inptImgagenMateria.InputStream)
                 {
