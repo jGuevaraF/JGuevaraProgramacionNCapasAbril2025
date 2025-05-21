@@ -35,7 +35,7 @@ namespace PL
 
         public static void GetAll()
         {
-            ML.Result result = BL.Materia.GetAllSP();
+            ML.Result result = BL.Materia.GetAll();
 
             if (result.Correct)
             {

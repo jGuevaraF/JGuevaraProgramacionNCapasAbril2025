@@ -399,7 +399,7 @@ namespace BL
             return result;
         }
 
-        public static ML.Result GetAllSP()
+        public static ML.Result GetAllSP(ML.Materia Materia)
         {
             ML.Result result = new ML.Result();
 
@@ -408,7 +408,7 @@ namespace BL
 
                 using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
                 {
-                    var materiaList = context.MateriaGetAll().ToList();
+                    var materiaList = context.MateriaGetAll(Materia.Nombre, Materia.Semestre.IdSemestre).ToList();
 
                     if (materiaList.Count > 0)
                     {
@@ -423,8 +423,8 @@ namespace BL
                             materia.Descripcion = itemMateria.Descripcion;
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
                             materia.Imagen = itemMateria.Imagen;
-                            materia.Semestre.IdSemestre = (int)itemMateria.IdSemestre;
-                            materia.Semestre.Nombre = itemMateria.Semestre;
+                            materia.Semestre.IdSemestre = itemMateria.IdSemestre ?? 0;
+                            //materia.Semestre.Nombre = itemMateria.Semestre;
 
 
 
@@ -517,6 +517,7 @@ namespace BL
                         query.Nombre = materia.Nombre;
                         query.Descripcion = materia.Descripcion;
                         query.Creditos = materia.Creditos;
+                        query.Imagen = materia.Imagen;
 
                         context.SaveChanges();
 
@@ -612,6 +613,45 @@ namespace BL
                 result.ErrorMessage = ex.Message; ;
                 result.Ex = ex;
             }
+            return result;
+        }
+
+
+        public static ML.Result GetByIdEFSP(int IdMateria)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
+                {
+                    var query = context.MateriaGetById(IdMateria).SingleOrDefault();
+
+                    if (query != null)
+                    {
+                        ML.Materia materia = new ML.Materia();
+                        materia.Semestre = new ML.Semestre();
+
+                        materia.IdMateria = query.IdMateria;
+                        materia.Nombre = query.Nombre;
+                        materia.Descripcion = query.Descripcion;
+                        materia.Creditos = Convert.ToDecimal(query.Creditos);
+                        materia.Imagen = query.Imagen;
+                        materia.Semestre.IdSemestre = (int)query.IdSemestre;
+
+                        result.Object = materia;
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                result.ErrorMessage = e.Message;
+                result.Correct = false;
+                result.Ex = e;
+
+            }
+
             return result;
         }
 

@@ -14,9 +14,40 @@ namespace PL_MVC.Controllers
         public ActionResult GetAll()
         {
             ML.Materia materia = new ML.Materia();
+            materia.Semestre = new ML.Semestre();
             ML.Result result = new ML.Result();
 
-            result = BL.Materia.GetAllSP();
+            materia.Nombre = materia.Nombre ?? "";
+            materia.Nombre = materia.Nombre == null ? "": materia.Nombre;
+
+            result = BL.Materia.GetAllSP(materia);
+
+            if (result.Correct)
+            {
+                materia.Materias = result.Objects;
+                ML.Result resultSemestres = BL.Materia.SemestreGetAll();
+                if (resultSemestres.Correct)
+                {
+                    materia.Semestre.Semestres = resultSemestres.Objects;
+                }
+                
+            }
+            return View(materia);
+        }
+
+        [HttpPost]
+        public ActionResult GetAll(ML.Materia Materia)
+        {
+            ML.Materia materia = new ML.Materia();
+            materia.Semestre = new ML.Semestre();
+
+            ML.Result resultSemestres = BL.Materia.SemestreGetAll();
+            if (resultSemestres.Correct)
+            {
+                materia.Semestre.Semestres = resultSemestres.Objects;
+            }
+
+            ML.Result result = BL.Materia.GetAllSP(Materia);
 
             if (result.Correct)
             {
@@ -35,7 +66,7 @@ namespace PL_MVC.Controllers
 
             if (IdMateria > 0)
             {
-                ML.Result result = BL.Materia.GetById(IdMateria.Value);
+                ML.Result result = BL.Materia.GetByIdEFSP(IdMateria.Value);
                 materia = (ML.Materia)result.Object; 
             }
 
@@ -60,16 +91,21 @@ namespace PL_MVC.Controllers
 
             HttpPostedFileBase inptImgagenMateria = Request.Files["inptImgagenMateria"];
 
-            using (Stream inputStream = inptImgagenMateria.InputStream)
+
+            if(inptImgagenMateria.ContentLength > 0)
             {
-                MemoryStream memoryStream = inputStream as MemoryStream;
-                if (memoryStream == null)
+                using (Stream inputStream = inptImgagenMateria.InputStream)
                 {
-                    memoryStream = new MemoryStream();
-                    inputStream.CopyTo(memoryStream);
+                    MemoryStream memoryStream = inputStream as MemoryStream;
+                    if (memoryStream == null)
+                    {
+                        memoryStream = new MemoryStream();
+                        inputStream.CopyTo(memoryStream);
+                    }
+                    materia.Imagen = memoryStream.ToArray();
                 }
-                materia.Imagen = memoryStream.ToArray();
             }
+
 
 
 

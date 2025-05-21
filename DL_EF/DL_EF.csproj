@@ -81,6 +81,9 @@
     <Compile Include="MateriaGetByIdSemestre_Result.cs">
       <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
     </Compile>
+    <Compile Include="MateriaGetById_Result.cs">
+      <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Semestre.cs">
       <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>

@@ -23,7 +23,29 @@
 
     <hr />
 
-    <div class="row">
+    @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-3">
+                @Html.TextBoxFor(model => model.Nombre)
+            </div>
+            <div class="col-3">
+                @Html.DropDownListFor(model => model.Semestre.IdSemestre,
+               new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"),
+               "Selecciona un semestre", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-success" type="submit">Buscar</button>
+            </div>
+        </div>
+    }
+
+
+
+    <div class="row pt-4">
         <div class="col-12">
 
             <table class="table table-bordered">

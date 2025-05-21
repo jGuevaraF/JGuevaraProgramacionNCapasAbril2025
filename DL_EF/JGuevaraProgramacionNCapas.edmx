@@ -69,7 +69,13 @@
         <Function Name="MateriaDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdMateria" Type="int" Mode="In" />
         </Function>
-        <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="MateriaGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="IdSemestre" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MateriaGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMateria" Type="int" Mode="In" />
+        </Function>
         <Function Name="MateriaGetByIdSemestre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdSemestre" Type="int" Mode="In" />
         </Function>
@@ -131,7 +137,13 @@
             <Parameter Name="Imagen" Mode="In" Type="Binary" />
             <Parameter Name="IdGrupo" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="MateriaGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result)" />
+          <FunctionImport Name="MateriaGetById" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetById_Result)">
+          <Parameter Name="IdMateria" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MateriaGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Materia">
           <Key>
@@ -189,14 +201,21 @@
           <Property Type="Int32" Name="IdMateria" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
         </ComplexType>
-        <ComplexType Name="MateriaGetAll_Result">
+        <ComplexType Name="MateriaGetById_Result">
           <Property Type="Int32" Name="IdMateria" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
           <Property Type="Decimal" Name="Creditos" Nullable="true" Precision="10" Scale="2" />
           <Property Type="Int32" Name="IdSemestre" Nullable="true" />
-          <Property Type="String" Name="Semestre" Nullable="true" MaxLength="50" />
           <Property Type="Binary" Name="Imagen" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="MateriaGetAll_Result">
+          <Property Type="Int32" Name="IdMateria" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="Creditos" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Binary" Name="Imagen" Nullable="true" />
+          <Property Type="Int32" Name="IdSemestre" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -259,6 +278,18 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MateriaAdd" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaAdd" />
+          <FunctionImportMapping FunctionImportName="MateriaGetById" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaGetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetById_Result">
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Creditos" ColumnName="Creditos" />
+                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="MateriaGetAll" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaGetAll">
             <ResultMapping>
               <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result">
@@ -266,9 +297,8 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Creditos" ColumnName="Creditos" />
-                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
-                <ScalarProperty Name="Semestre" ColumnName="Semestre" />
                 <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

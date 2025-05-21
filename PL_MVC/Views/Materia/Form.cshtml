@@ -21,10 +21,11 @@
 
     @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+
+        
         <div class="row">
             <div class="col-6">
-                @Html.LabelFor(model => model.IdMateria, new { @class = "form-label" })
-                @Html.TextBoxFor(model => model.IdMateria, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.IdMateria)
             </div>
 
             <div>
@@ -53,15 +54,24 @@
             <div>
                 @Html.LabelFor(model => model.IdMateria, new { @class = "form-label" })
                 @Html.DropDownListFor(model => model.IdMateria, new SelectList(string.Empty),
-               "Selecciona una Materia", new { @class = "form-control", @id = "ddlMateria" })
+                "Selecciona una Materia", new { @class = "form-control", @id = "ddlMateria" })
             </div>
 
 
-
+            @Html.HiddenFor(model => model.Imagen)
         </div><div class="row">
             <div class="col-12">
                 <input type="file" name="inptImgagenMateria" value="" accept="image/*" onchange="CargarArchivo(event)" />
-                <img alt="Alternate Text" src="~/Content/Imagenes/vector-users-icon.jpg" id="imgInput" style="width:100px" />
+                @if (Model.Imagen != null)
+                {
+                    <img src="data:image/*;base64,@Convert.ToBase64String(Model.Imagen)" height="250" />
+                }
+                else
+                {
+
+                    <img alt="Alternate Text" src="~/Content/Imagenes/vector-users-icon.jpg" id="imgInput" height="250" />
+                }
+
 
             </div>
         </div>
