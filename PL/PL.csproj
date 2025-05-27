@@ -72,6 +72,9 @@
       <Name>ML</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="txt\TestRead.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

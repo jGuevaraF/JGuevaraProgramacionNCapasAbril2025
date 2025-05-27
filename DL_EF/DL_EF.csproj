@@ -75,6 +75,9 @@
     <Compile Include="Materia.cs">
       <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
     </Compile>
+    <Compile Include="MateriaGetAllView.cs">
+      <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
+    </Compile>
     <Compile Include="MateriaGetAll_Result.cs">
       <DependentUpon>JGuevaraProgramacionNCapas.tt</DependentUpon>
     </Compile>

@@ -31,6 +31,19 @@
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
           <Property Name="IdGrupo" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'JGuevaraProgramacionNCapasAbri.dbo.MateriaGetAllView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MateriaGetAllView">
+          <Key>
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdMateria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="100" />
+          <Property Name="Creditos" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Imagen" Type="varbinary(max)" />
+          <Property Name="IdSemestre" Type="int" />
+        </EntityType>
         <Association Name="FK__Semestre__IdGrup__2E1BDC42">
           <End Role="Grupo" Type="Self.Grupo" Multiplicity="0..1" />
           <End Role="Semestre" Type="Self.Semestre" Multiplicity="*" />
@@ -84,6 +97,16 @@
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Semestre" EntityType="Self.Semestre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MateriaGetAllView" EntityType="Self.MateriaGetAllView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MateriaGetAllView].[IdMateria] AS [IdMateria], 
+    [MateriaGetAllView].[Nombre] AS [Nombre], 
+    [MateriaGetAllView].[Descripcion] AS [Descripcion], 
+    [MateriaGetAllView].[Creditos] AS [Creditos], 
+    [MateriaGetAllView].[Imagen] AS [Imagen], 
+    [MateriaGetAllView].[IdSemestre] AS [IdSemestre]
+    FROM [dbo].[MateriaGetAllView] AS [MateriaGetAllView]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__Semestre__IdGrup__2E1BDC42" Association="Self.FK__Semestre__IdGrup__2E1BDC42">
             <End Role="Grupo" EntitySet="Grupo" />
             <End Role="Semestre" EntitySet="Semestre" />
@@ -140,6 +163,7 @@
           <FunctionImport Name="MateriaGetById" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetById_Result)">
           <Parameter Name="IdMateria" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="MateriaGetAllViews" EntityType="JGuevaraProgramacionNCapasAbriModel.MateriaGetAllView" />
           <FunctionImport Name="MateriaGetAll" ReturnType="Collection(JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result)">
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="IdSemestre" Mode="In" Type="Int32" />
@@ -209,6 +233,17 @@
           <Property Type="Int32" Name="IdSemestre" Nullable="true" />
           <Property Type="Binary" Name="Imagen" Nullable="true" />
         </ComplexType>
+        <EntityType Name="MateriaGetAllView">
+          <Key>
+            <PropertyRef Name="IdMateria" />
+          </Key>
+          <Property Name="IdMateria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Creditos" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="IdSemestre" Type="Int32" />
+          <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <ComplexType Name="MateriaGetAll_Result">
           <Property Type="Int32" Name="IdMateria" Nullable="false" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
@@ -290,6 +325,18 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="MateriaGetAllViews">
+            <EntityTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetAllView">
+              <MappingFragment StoreEntitySet="MateriaGetAllView">
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+                <ScalarProperty Name="IdSemestre" ColumnName="IdSemestre" />
+                <ScalarProperty Name="Creditos" ColumnName="Creditos" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdMateria" ColumnName="IdMateria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="MateriaGetAll" FunctionName="JGuevaraProgramacionNCapasAbriModel.Store.MateriaGetAll">
             <ResultMapping>
               <ComplexTypeMapping TypeName="JGuevaraProgramacionNCapasAbriModel.MateriaGetAll_Result">

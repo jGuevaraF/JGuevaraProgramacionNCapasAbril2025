@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+@Html.Partial("_Errores")
+
 <div class="container">
     <div class="row">
         <div class="col-md-6">
@@ -20,18 +23,18 @@
         </div>
     </div>
 
-
     <hr />
 
-    @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post))
+    @using (Html.BeginForm("GetAll", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        <div>Busqueda Abierta</div>
         <div class="row">
             <div class="col-3">
                 @Html.TextBoxFor(model => model.Nombre)
             </div>
             <div class="col-3">
                 @Html.DropDownListFor(model => model.Semestre.IdSemestre,
-               new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"),
+               new SelectList(string.Empty, "IdSemestre", "Descripcion"),
                "Selecciona un semestre", new { @class = "form-control" })
             </div>
         </div>
@@ -41,11 +44,50 @@
                 <button class="btn btn-success" type="submit">Buscar</button>
             </div>
         </div>
+
+
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+
+            <div>Carga Masiva</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label>Txt</label>
+                    <input type="radio" name="tipoArchivo" value="txt" />
+
+                    <label>Excel</label>
+                    <input type="radio" name="tipoArchivo" value="excel" />
+                </div>
+
+                <div class="col-6">
+                    <input type="file" name="inptArchivo" value="" />
+
+                </div>
+
+            </div>
+
+
+            <button>Validar</button>
+
+            <button>Cargar</button>
+
+
+        </div>
+
+
+
+
+
     }
+        
 
 
 
-    <div class="row pt-4">
+    <div class="row mt-4">
         <div class="col-12">
 
             <table class="table table-bordered">
@@ -83,7 +125,7 @@
                             @if (materia.Imagen != null)
                             {
                                 <td>
-                                    <img src="data:image/*;base64,@Convert.ToBase64String(@materia.Imagen)" />
+                                    <img src="data:image/*;base64,@Convert.ToBase64String(@materia.Imagen)" width="150"/>
                                 </td>
                             }
                         </tr>
@@ -92,51 +134,6 @@
             </table>
         </div>
     </div>
-
-    <div>
-        <input type="text" name="name" value="" id="input1" />
-        <input type="text" name="inputName" value="" class="input1" />
-        <input type="text" name="name" value="" id="input1" class="input1" />
-    </div>
 </div>
-
-@*Layout*@
-@Scripts.Render("~/bundles/jquery")
-<script src="~/Scripts/jquery-3.7.0.min.js"></script>
-<script>
-    // codigo de JS de JQuery
-
-    //JS
-    var input1 = document.getElementById('input1');
-    var input2 = document.getElementsByClassName('input1')
-    var input3 = document.getElementsByName('inputName')
-    console.log(input3)
-
-    //JQuery
-    let input1JQ = $('#input1')[0]
-    let input2JQ = $('.input1')
-    let input3JQ = $('[name=inputName]')
-    console.log(input3JQ)
-
-
-    var nuevoNombre = "Globlal" // Scope variables globales
-
-    function MostrarNombre() {
-        let nombre = "Erick"; // Dentro de la funcion.
-        console.log(nombre)
-    }
-
-    function Nombre() {
-        /* let nombre = "Omar"*/
-        console.log(nombre)
-        nombre = "VariableLET"
-        console.log(nombre)
-
-    }
-
-    MostrarNombre();
-    Nombre();
-
-</script>
 
 

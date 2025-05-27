@@ -1,4 +1,6 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using BL;
+using Microsoft.Ajax.Utilities;
+using ML;
 using System;
 using System.IO;
 using System.Linq;
@@ -32,37 +34,99 @@ namespace PL_MVC.Controllers
                 {
                     materia.Semestre.Semestres = resultSemestres.Objects;
                 }
-
+                
             }
+
+            ViewBag.Errores = TempData["Errores"];
+
+            ViewBag.Test = "Texto";
             return View(materia);
         }
 
         [HttpPost]
-        public ActionResult GetAll(ML.Materia Materia)
-        {
+        public ActionResult GetAll(ML.Materia Materia, HttpPostedFileBase inptArchivo, string tipoArchivo)
+        {    
 
-
-            //Materia.Nombre = Materia.Nombre == null ? "" : Materia.Nombre;
-            Materia.Nombre = Materia.Nombre ?? "";
-            ML.Result result = BL.Materia.GetAllSP(Materia);
-
-            ML.Result resultSemestres = BL.Materia.SemestreGetAll();
-            if (resultSemestres.Correct)
+            if(tipoArchivo == null)
             {
-                Materia.Semestre.Semestres = resultSemestres.Objects;
+                // Busqueda abierta
+                //Materia.Nombre = Materia.Nombre == null ? "" : Materia.Nombre;
+                Materia.Nombre = Materia.Nombre ?? "";
+                ML.Result result = BL.Materia.GetAllSP(Materia);
+
+                ML.Result resultSemestres = BL.Materia.SemestreGetAll();
+                if (resultSemestres.Correct)
+                {
+                    Materia.Semestre.Semestres = resultSemestres.Objects;
+                }
+
+
+                if (result.Correct)
+                {
+                    Materia.Materias = result.Objects;
+                }
+
+
+                Materia.Nombre = "";
+                Materia.Semestre.IdSemestre = 0;
+                //apellidos
+                //Rol.IdRol = 0
+            }
+            else if(tipoArchivo == "txt")
+            {
+                //Path.GetFileName(inptArchivo.FileName)  txt, excel
+                if (inptArchivo.FileName.Split('.')[1] == "txt")
+                {
+                    Materia.Semestre = new ML.Semestre();
+
+                    using (StreamReader stream = new StreamReader(inptArchivo.InputStream))
+                    {
+                        //while ()
+                        //{
+                        //    // Se leia y validaba el archivo.
+                        //}
+                        // Omar | 05/26/2025    Bien
+                        // Test | 05/26/2025    Bien
+                        // Test2 | 05/26/2025    Error
+                        // Test3 | 05/26/2025    Error
+
+                        // asignabar sus errores 
+
+
+                        //if (Usuario.Errores.Count == 0)
+                        //{
+                        //    // Guardar el archivo TXT en la carpeta creada
+
+                        //    // C://users/documents/NombreProyecto/Content/txt/Prueba5/26/2025/5:58:00.txt
+
+                        //    string path = Path.GetFileName(inptArchivo.FileName);
+                        //    string fullPath = Server.MapPath("~/Content/txt") + Path.GetFileNameWithoutExtension(path) + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
+
+                        //    Session["Rutatxt"] = fullPath;
+
+                        //    if (!System.IO.File.Exists(fullPath))
+                        //    {
+                        //        inptArchivo.SaveAs(fullPath);
+                        //    }
+
+
+                        
+                    }
+
+
+
+
+                        ML.Materia materia = new ML.Materia();
+
+
+                    TempData["Errores"] = "Mensaje desde el controlador";
+                }
+                
+
+
             }
 
 
-            if (result.Correct)
-            {
-                Materia.Materias = result.Objects;
-            }
-
-
-            Materia.Nombre = "";
-            Materia.Semestre.IdSemestre = 0;
-            //apellidos
-            //Rol.IdRol = 0
             return View(Materia);
         }
 

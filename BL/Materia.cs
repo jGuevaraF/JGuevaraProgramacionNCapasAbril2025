@@ -405,7 +405,6 @@ namespace BL
 
             try
             {
-
                 using (DL_EF.JGuevaraProgramacionNCapasAbriEntities context = new DL_EF.JGuevaraProgramacionNCapasAbriEntities())
                 {
                     var materiaList = context.MateriaGetAll(Materia.Nombre, Materia.Semestre.IdSemestre).ToList();

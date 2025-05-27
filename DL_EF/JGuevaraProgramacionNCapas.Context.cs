@@ -30,6 +30,7 @@ namespace DL_EF
         public virtual DbSet<Semestre> Semestres { get; set; }
         public virtual DbSet<Materia> Materias { get; set; }
         public virtual DbSet<Grupo> Grupoes { get; set; }
+        public virtual DbSet<MateriaGetAllView> MateriaGetAllViews { get; set; }
     
         public virtual int MateriaDelete(Nullable<int> idMateria)
         {
