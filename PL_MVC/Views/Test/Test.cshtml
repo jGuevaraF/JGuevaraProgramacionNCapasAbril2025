@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("Modal")
+
+@using (Html.BeginForm("Test", "Test", FormMethod.Post))
+{
+    <input type="text" name="algo" />
+    <button type="submit">Me debes 5 caguamas si funciona</button>
+}
+<p>@ViewBag.Test</p>

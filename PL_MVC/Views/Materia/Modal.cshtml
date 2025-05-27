@@ -1,0 +1,18 @@
+﻿@{
+    int correctos = 1;
+    int errores = 1;
+}
+@if (ViewBag.CargaMasiva != null)
+{
+    foreach (string error in ViewBag.CargaMasiva.Errores)
+    {
+        <p>@error  @error</p>
+        errores++;
+    }
+
+    foreach (string error in ViewBag.CargaMasiva.Correctos)
+    {
+        <p>@correctos  @error</p>
+        correctos++;
+    }
+}

@@ -25,7 +25,7 @@ namespace PL
 
             if(Errores.Count > 0)
             {
-                return string.Join(",", Errores);
+                return string.Join("\n", Errores);
             }
 
             return "";

@@ -2,6 +2,7 @@
 using Microsoft.Ajax.Utilities;
 using ML;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -45,27 +46,30 @@ namespace PL_MVC.Controllers
 
         [HttpPost]
         public ActionResult GetAll(ML.Materia Materia, HttpPostedFileBase inptArchivo, string tipoArchivo)
-        {    
+        {
 
-            if(tipoArchivo == null)
+            ML.Result result = BL.Materia.GetAllSP(Materia);
+
+            ML.Result resultSemestres = BL.Materia.SemestreGetAll();
+            if (resultSemestres.Correct)
+            {
+                Materia.Semestre.Semestres = resultSemestres.Objects;
+            }
+
+
+            if (result.Correct)
+            {
+                Materia.Materias = result.Objects;
+            }
+
+
+
+            if (tipoArchivo == null)
             {
                 // Busqueda abierta
                 //Materia.Nombre = Materia.Nombre == null ? "" : Materia.Nombre;
                 Materia.Nombre = Materia.Nombre ?? "";
-                ML.Result result = BL.Materia.GetAllSP(Materia);
-
-                ML.Result resultSemestres = BL.Materia.SemestreGetAll();
-                if (resultSemestres.Correct)
-                {
-                    Materia.Semestre.Semestres = resultSemestres.Objects;
-                }
-
-
-                if (result.Correct)
-                {
-                    Materia.Materias = result.Objects;
-                }
-
+                
 
                 Materia.Nombre = "";
                 Materia.Semestre.IdSemestre = 0;
@@ -78,45 +82,32 @@ namespace PL_MVC.Controllers
                 if (inptArchivo.FileName.Split('.')[1] == "txt")
                 {
                     Materia.Semestre = new ML.Semestre();
+                    ML.CargaMasiva cargaMasiva = new ML.CargaMasiva();
+                    cargaMasiva.Errores = new List<string>();
+                    cargaMasiva.Correctos = new List<string>();
 
-                    using (StreamReader stream = new StreamReader(inptArchivo.InputStream))
-                    {
-                        //while ()
-                        //{
-                        //    // Se leia y validaba el archivo.
-                        //}
-                        // Omar | 05/26/2025    Bien
-                        // Test | 05/26/2025    Bien
-                        // Test2 | 05/26/2025    Error
-                        // Test3 | 05/26/2025    Error
-
-                        // asignabar sus errores 
-
-
-                        //if (Usuario.Errores.Count == 0)
-                        //{
-                        //    // Guardar el archivo TXT en la carpeta creada
-
-                        //    // C://users/documents/NombreProyecto/Content/txt/Prueba5/26/2025/5:58:00.txt
-
-                        //    string path = Path.GetFileName(inptArchivo.FileName);
-                        //    string fullPath = Server.MapPath("~/Content/txt") + Path.GetFileNameWithoutExtension(path) + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
-
-                        //    Session["Rutatxt"] = fullPath;
-
-                        //    if (!System.IO.File.Exists(fullPath))
-                        //    {
-                        //        inptArchivo.SaveAs(fullPath);
-                        //    }
-
-
+                    //using (StreamReader stream = new StreamReader(inptArchivo.InputStream))
+                    //{
+                    //    //linea por linea
+                    //    //ignorar la primer linea
                         
+
+
+
+
+                    //}
+
+                    for(int i = 0; i<= 5; i++)
+                    {
+                        ML.Materia test = new ML.Materia();
+                        ////linea
+                        BL.CargaMasiva.Validar(test, cargaMasiva.Errores, cargaMasiva.Correctos);
+
                     }
 
+                    ViewBag.CargaMasiva = cargaMasiva;
 
-
-
-                        ML.Materia materia = new ML.Materia();
+                    ML.Materia materia = new ML.Materia();
 
 
                     TempData["Errores"] = "Mensaje desde el controlador";
@@ -126,10 +117,10 @@ namespace PL_MVC.Controllers
 
             }
 
-
             return View(Materia);
         }
 
+        
         [HttpGet]
         public ActionResult Form(int? IdMateria)
         {

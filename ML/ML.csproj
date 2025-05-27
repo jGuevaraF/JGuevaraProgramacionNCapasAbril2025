@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CargaMasiva.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Grupo.cs" />
     <Compile Include="Materia.cs" />
