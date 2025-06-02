@@ -26,11 +26,13 @@
         <div class="row">
             <div class="col-6">
                 @Html.HiddenFor(model => model.IdMateria)
+
+                @*<input type="type" name="name" class="border border-danger" value="" />*@
             </div>
 
             <div>
                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id="txtNombre", @oninput="validarNombre()" })
             </div>
         </div>
 
@@ -89,6 +91,32 @@
 
 <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 <script>
+    function validarNombre() {
+        var txtNombre = $("#txtNombre").val();
+
+        const regex = /^[a-zA-Z\s]+$/;
+        if (!regex.test(txtNombre)) {
+
+            console.log("error")
+            $("#txtNombre").addClass("border border-danger");
+            $("#txtNombre").removeClass("border border-success");
+        }
+        else {
+            console.log("correcto")
+            $("#txtNombre").removeClass("border border-danger");
+            $("#txtNombre").addClass("border border-success");
+
+        }
+    }
+
+
+
+
+
+
+
+
+
     var CargarArchivo = function (input) {
 
         var img = input.target.files[0];

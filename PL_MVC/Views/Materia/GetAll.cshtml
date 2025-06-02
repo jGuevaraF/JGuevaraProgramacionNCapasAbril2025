@@ -37,20 +37,16 @@
                new SelectList(string.Empty, "IdSemestre", "Descripcion"),
                "Selecciona un semestre", new { @class = "form-control" })
             </div>
-        </div>
-
-        <div class="row">
+        </div><div class="row">
             <div class="col-12">
                 <button class="btn btn-success" type="submit">Buscar</button>
             </div>
         </div>
-
-
         <div>
             <div class="row">
                 <div class="col-md-12">
 
-            <div>Carga Masiva</div>
+                    <div>Carga Masiva</div>
                 </div>
             </div>
 
@@ -71,21 +67,20 @@
             </div>
 
 
-            <button>Validar</button>
-
-            <button>Cargar</button>
+            <button class="btn btn-warning">Validar</button>
 
 
+            @if (Session["Errores"] != null)
+            {
+                <button class="btn btn-danger">Descargar</button>
+            }
+
+            @if (Session["Correctos"] != null)
+            {
+                <button class="btn btn-success">Cargar</button>
+            }
         </div>
-
-
-
-
-
     }
-        
-
-
 
     <div class="row mt-4">
         <div class="col-12">
@@ -125,7 +120,7 @@
                             @if (materia.Imagen != null)
                             {
                                 <td>
-                                    <img src="data:image/*;base64,@Convert.ToBase64String(@materia.Imagen)" width="150"/>
+                                    <img src="data:image/*;base64,@Convert.ToBase64String(@materia.Imagen)" width="150" />
                                 </td>
                             }
                         </tr>

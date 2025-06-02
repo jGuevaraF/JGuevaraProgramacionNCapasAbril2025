@@ -7,11 +7,50 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Razor.Parser;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PL_MVC.Controllers
 {
     public class MateriaController : Controller
     {
+
+        //public ActionResult Descargar()
+        //{
+        //    // extraer de su session 
+        //    string rutaErrores = Session["Errores"] as string;
+
+        //    Session["Errores"] = null;
+        //    return File();
+        //}
+
+
+        public ActionResult GuardarDatos()
+        {
+
+            // Extraer de tu sesion la ruta
+            string ruta = "";
+
+            using (StreamReader sr = new StreamReader(ruta))
+            {
+                string linea;
+                while((linea = sr.ReadLine()) != null)
+                {
+                    // Leer cada linea
+                    string[] campos = sr.ReadLine().Split('|');
+
+                    ML.Materia materia = new ML.Materia();
+                    materia.Nombre = campos[0];
+
+
+
+                    BL.Materia.Add(materia);
+                }
+            }
+
+                return View();
+        }
+
         // GET: Materia
         [HttpGet]
         public ActionResult GetAll()
@@ -86,35 +125,68 @@ namespace PL_MVC.Controllers
                     cargaMasiva.Errores = new List<string>();
                     cargaMasiva.Correctos = new List<string>();
 
-                    //using (StreamReader stream = new StreamReader(inptArchivo.InputStream))
-                    //{
-                    //    //linea por linea
-                    //    //ignorar la primer linea
-                        
-
-
-
-
-                    //}
-
-                    for(int i = 0; i<= 5; i++)
+                    using (StreamReader stream = new StreamReader(inptArchivo.InputStream))
                     {
-                        ML.Materia test = new ML.Materia();
-                        ////linea
-                        BL.CargaMasiva.Validar(test, cargaMasiva.Errores, cargaMasiva.Correctos);
+                        string linea = stream.ReadLine();
+                        while ((linea = stream.ReadLine()) != null)
+                        {
+                            string[] lineaLeida = linea.Split('|');
+                            BL.CargaMasiva.Validar(lineaLeida, cargaMasiva.Errores, cargaMasiva.Correctos);           
+                        }
 
+                        if (cargaMasiva.Errores.Count > 0)
+                        {
+                            string ruta = Path.GetFileName(inptArchivo.FileName);
+                            string fullPath = Server.MapPath("~/Content/Errores/") + Path.GetFileNameWithoutExtension(inptArchivo.FileName) + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
+                            Session["Errores"] = fullPath;
+
+                            if (!System.IO.File.Exists(fullPath))
+                            {
+                                using (StreamWriter streamWriter = new StreamWriter(fullPath))
+                                {
+                                    foreach (string lineaRead in cargaMasiva.Errores)
+                                    {
+                                        streamWriter.WriteLine(lineaRead);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string ruta = Path.GetFileName(inptArchivo.FileName);
+                            string fullPath = Server.MapPath("~/Content/txt/") + Path.GetFileNameWithoutExtension(inptArchivo.FileName) + DateTime.Now.ToString("ddMMyyhhmmss") + ".txt";
+                            Session["Correctos"] = fullPath;
+                            if (!System.IO.File.Exists(fullPath))
+                            {
+                                inptArchivo.SaveAs(fullPath);
+                            }
+                        }
                     }
 
                     ViewBag.CargaMasiva = cargaMasiva;
-
                     ML.Materia materia = new ML.Materia();
-
-
                     TempData["Errores"] = "Mensaje desde el controlador";
                 }
-                
 
 
+            }
+            else
+            {
+                if (Path.GetExtension(inptArchivo.FileName) == ".xlsx")
+                {
+                    string path = Path.GetFileName(inptArchivo.FileName);
+                    string fullPath = Server.MapPath("~/Content/Excel/") + Path.GetFileNameWithoutExtension(inptArchivo.FileName) + DateTime.Now.ToString("ddMMyyhhmmss") + ".xlsx";
+
+                    if (!System.IO.File.Exists(fullPath))
+                    {
+                        inptArchivo.SaveAs(fullPath);
+                    }
+
+                    string conectionString = $"Provider=Microsoft.ACE.OLEDB.12.0; Extended Properties=\"Excel 12.0 Xml;HDR=YES\"; Data Source={fullPath};";
+
+                    ML.Result ResultExcel = BL.CargaMasiva.LeerExcel(conectionString);
+
+                }
             }
 
             return View(Materia);
