@@ -19,10 +19,10 @@
         <i class="bi bi-trash3-fill"></i>
     </div>
 
-    @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data", id = "UsuarioFormulario" , novalidate = "novalidate", @class = "needs-validation" }))
     {
 
-        
+
         <div class="row">
             <div class="col-6">
                 @Html.HiddenFor(model => model.IdMateria)
@@ -32,14 +32,14 @@
 
             <div>
                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id="txtNombre", @oninput="validarNombre()" })
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id="txtNombre", onkeypress = "validarNombre(this, event)" })
             </div>
         </div>
 
         <div class="row">
             <div class="col-6">
                 @Html.LabelFor(model => model.Descripcion, new { @class = "form-label" })
-                @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control", onkeypress = "validarNombre(this, event)" })
             </div>
 
             <div>
@@ -91,24 +91,41 @@
 
 <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 <script>
-    function validarNombre() {
-        var txtNombre = $("#txtNombre").val();
+    function validarNombre(input, event) {
 
         const regex = /^[a-zA-Z\s]+$/;
-        if (!regex.test(txtNombre)) {
+        var letra = event.key;
 
-            console.log("error")
-            $("#txtNombre").addClass("border border-danger");
-            $("#txtNombre").removeClass("border border-success");
-        }
-        else {
-            console.log("correcto")
-            $("#txtNombre").removeClass("border border-danger");
-            $("#txtNombre").addClass("border border-success");
-
+        if (regex.test(letra)) {
+            $(input).removeClass("border border-danger");
+            $(input).addClass("border border-success");
+        } else {
+            event.preventDefault();
+            $(input).addClass("border border-danger");
+            $(input).removeClass("border border-success");
         }
     }
 
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.UsuarioFormulario')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
 
 
 

@@ -16,5 +16,6 @@ namespace ML
         public List<object> Materias { get; set; }
         public byte[] Imagen { get; set; }
         public List<object> Errores { get; set; }
+        public string Fecha { get; set; }
     }
 }
