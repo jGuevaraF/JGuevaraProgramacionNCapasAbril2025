@@ -34,7 +34,7 @@ namespace PL_MVC.Controllers
             using (StreamReader sr = new StreamReader(ruta))
             {
                 string linea;
-                while((linea = sr.ReadLine()) != null)
+                while ((linea = sr.ReadLine()) != null)
                 {
                     // Leer cada linea
                     string[] campos = sr.ReadLine().Split('|');
@@ -48,7 +48,7 @@ namespace PL_MVC.Controllers
                 }
             }
 
-                return View();
+            return View();
         }
 
         // GET: Materia
@@ -74,7 +74,7 @@ namespace PL_MVC.Controllers
                 {
                     materia.Semestre.Semestres = resultSemestres.Objects;
                 }
-                
+
             }
 
             ViewBag.Errores = TempData["Errores"];
@@ -108,14 +108,14 @@ namespace PL_MVC.Controllers
                 // Busqueda abierta
                 //Materia.Nombre = Materia.Nombre == null ? "" : Materia.Nombre;
                 Materia.Nombre = Materia.Nombre ?? "";
-                
+
 
                 Materia.Nombre = "";
                 Materia.Semestre.IdSemestre = 0;
                 //apellidos
                 //Rol.IdRol = 0
             }
-            else if(tipoArchivo == "txt")
+            else if (tipoArchivo == "txt")
             {
                 //Path.GetFileName(inptArchivo.FileName)  txt, excel
                 if (inptArchivo.FileName.Split('.')[1] == "txt")
@@ -131,7 +131,7 @@ namespace PL_MVC.Controllers
                         while ((linea = stream.ReadLine()) != null)
                         {
                             string[] lineaLeida = linea.Split('|');
-                            BL.CargaMasiva.Validar(lineaLeida, cargaMasiva.Errores, cargaMasiva.Correctos);           
+                            BL.CargaMasiva.Validar(lineaLeida, cargaMasiva.Errores, cargaMasiva.Correctos);
                         }
 
                         if (cargaMasiva.Errores.Count > 0)
@@ -192,7 +192,7 @@ namespace PL_MVC.Controllers
             return View(Materia);
         }
 
-        
+
         [HttpGet]
         public ActionResult Form(int? IdMateria)
         {
@@ -242,24 +242,37 @@ namespace PL_MVC.Controllers
                 }
             }
 
-
-
-
-            if (materia.IdMateria > 0)
+            if (ModelState.IsValid)
             {
-                ML.Result result = BL.Materia.Update(materia);
+                //true
+                if (materia.IdMateria > 0)
+                {
+                    ML.Result result = BL.Materia.Update(materia);
+                }
+                else
+                {
+                    materia.Semestre = new ML.Semestre();
+
+                    materia.Semestre.IdSemestre = 19;
+                    BL.Materia.AddEFSP(materia);
+                }
             }
             else
             {
-                materia.Semestre = new ML.Semestre();
 
-                materia.Semestre.IdSemestre = 19;
-                BL.Materia.AddEFSP(materia);
+                ML.Result resultSemestres = BL.Materia.SemestreGetAll();
 
-                // Redireccionar al GetAll
+                if (resultSemestres.Correct)
+                {
+                    materia.Semestre.Semestres = resultSemestres.Objects;
+                    return View(materia);
+                }
 
-                //return View("GetAll");
+                //false
+                //mostrar los errores en el Formulario
             }
+
+           
             return RedirectToAction("GetAll");
         }
 
