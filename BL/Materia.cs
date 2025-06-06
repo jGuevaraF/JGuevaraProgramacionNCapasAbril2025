@@ -409,6 +409,8 @@ namespace BL
                 {
                     var materiaList = context.MateriaGetAll(Materia.Nombre, Materia.Semestre.IdSemestre).ToList();
 
+                    DateTime now = DateTime.Now;
+
                     if (materiaList.Count > 0)
                     {
                         result.Objects = new List<object>();
@@ -423,8 +425,8 @@ namespace BL
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
                             materia.Imagen = itemMateria.Imagen;
                             materia.Semestre.IdSemestre = itemMateria.IdSemestre ?? 0;
+                            materia.Fecha = now.ToString("dd/MM/yyyy");
                             //materia.Semestre.Nombre = itemMateria.Semestre;
-
 
 
                             result.Objects.Add(materia);

@@ -32,7 +32,13 @@
 
             <div>
                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
-                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id="txtNombre", onkeypress = "validarNombre(this, event)" })
+                <div>
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", onkeypress = "validarNombre(this, event)" })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new {@style="color:red; font-weight:bold;"})
+                </div>
+                <div>
+                    <span hidden></span>
+                </div>
             </div>
         </div>
 
@@ -74,6 +80,7 @@
                     <img alt="Alternate Text" src="~/Content/Imagenes/vector-users-icon.jpg" id="imgInput" height="250" />
                 }
 
+                @Html.TextBoxFor(model => model.Fecha, new {@type="date" })
 
             </div>
         </div>

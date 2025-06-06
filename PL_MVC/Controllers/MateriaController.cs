@@ -225,42 +225,69 @@ namespace PL_MVC.Controllers
         {
             // arreglo de bytes => Byte []
 
-            HttpPostedFileBase inptImgagenMateria = Request.Files["inptImgagenMateria"];
-
-
-            if (inptImgagenMateria.ContentLength > 0)
+            if(ModelState.IsValid)
             {
-                using (Stream inputStream = inptImgagenMateria.InputStream)
+                //todo esta bien
+
+                HttpPostedFileBase inptImgagenMateria = Request.Files["inptImgagenMateria"];
+
+
+                if (inptImgagenMateria.ContentLength > 0)
                 {
-                    MemoryStream memoryStream = inputStream as MemoryStream;
-                    if (memoryStream == null)
+                    using (Stream inputStream = inptImgagenMateria.InputStream)
                     {
-                        memoryStream = new MemoryStream();
-                        inputStream.CopyTo(memoryStream);
+                        MemoryStream memoryStream = inputStream as MemoryStream;
+                        if (memoryStream == null)
+                        {
+                            memoryStream = new MemoryStream();
+                            inputStream.CopyTo(memoryStream);
+                        }
+                        materia.Imagen = memoryStream.ToArray();
                     }
-                    materia.Imagen = memoryStream.ToArray();
                 }
-            }
 
 
 
 
-            if (materia.IdMateria > 0)
-            {
-                ML.Result result = BL.Materia.Update(materia);
+                if (materia.IdMateria > 0)
+                {
+                    ML.Result result = BL.Materia.Update(materia);
+                }
+                else
+                {
+                    materia.Semestre = new ML.Semestre();
+
+                    materia.Semestre.IdSemestre = 19;
+                    BL.Materia.AddEFSP(materia);
+
+                    // Redireccionar al GetAll
+
+                    //return View("GetAll");
+                }
+                return RedirectToAction("GetAll");
             }
             else
             {
-                materia.Semestre = new ML.Semestre();
+                //un error
+                //regresar al formulario
+                //DDL Rol ?. DDL Estado Municipio Colonia
+                //SE BORRAN
 
-                materia.Semestre.IdSemestre = 19;
-                BL.Materia.AddEFSP(materia);
+                //LLENAR TODOS LOS DDL QUE TENGO
+                //ROL, ESTADO, MUNICIPIO, COLONIA
 
-                // Redireccionar al GetAll
+                ML.Result resultSemestre = BL.Materia.SemestreGetAll();
 
-                //return View("GetAll");
+                if (resultSemestre.Correct)
+                {
+                    materia.Semestre.Semestres = resultSemestre.Objects;
+                }
+
+
+                return View(materia);
             }
-            return RedirectToAction("GetAll");
+
+           
         }
 
         [HttpGet]
