@@ -9,6 +9,8 @@ namespace ML
 {
     public class Semestre
     {
+        [Display(Name = "Selecciona el Semestre")]
+        [Key]
         public int IdSemestre { get; set; }
 
         [Required(ErrorMessage = "El campo Descripcion es requerido")]

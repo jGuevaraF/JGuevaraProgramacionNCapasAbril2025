@@ -9,11 +9,13 @@ namespace ML
 {
     public class Materia
     {
+        [Key]
         public int IdMateria { get; set; }
 
-
-        [Required (ErrorMessage ="El campo Nombre es requerido")]
-        [RegularExpression(@"^[aA-zZ]+$", ErrorMessage ="Solo acepto Letras")]
+        [Required(ErrorMessage = "El campo Nombre es requerido")]
+        [MaxLength(50, ErrorMessage = "No puede tener mas de 50 caracteres")]
+        [DataType(DataType.Text, ErrorMessage = "Tipo de dato incompatible")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Solo se aceptan letras.")]
         public string Nombre { get; set; }
 
         [Required (ErrorMessage ="El campo Descripcion es requerido")]

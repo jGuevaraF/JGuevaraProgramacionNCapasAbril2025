@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
 
 <div class="container">
 
@@ -19,9 +21,10 @@
         <i class="bi bi-trash3-fill"></i>
     </div>
 
-    @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data", id = "UsuarioFormulario" , novalidate = "novalidate", @class = "needs-validation" }))
+    @using (Html.BeginForm("Form", "Materia", FormMethod.Post, new { enctype = "multipart/form-data", id = "UsuarioFormulario", novalidate = "novalidate", @class = "needs-validation" }))
     {
 
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
         <div class="row">
             <div class="col-6">
@@ -32,13 +35,9 @@
 
             <div>
                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
-                <div>
-                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", onkeypress = "validarNombre(this, event)" })
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new {@style="color:red; font-weight:bold;"})
-                </div>
-                <div>
-                    <span hidden></span>
-                </div>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", onkeypress = "validarNombre(this, event)" })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                <span hidden="hidden"></span>
             </div>
         </div>
 
@@ -46,6 +45,7 @@
             <div class="col-6">
                 @Html.LabelFor(model => model.Descripcion, new { @class = "form-label" })
                 @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control", onkeypress = "validarNombre(this, event)" })
+                <span hidden="hidden"></span>
             </div>
 
             <div>
@@ -54,6 +54,7 @@
             </div>
 
             <div>
+                // IdSemestre
                 @Html.LabelFor(model => model.Semestre.IdSemestre, new { @class = "form-label" })
                 @Html.DropDownListFor(model => model.Semestre.IdSemestre, new SelectList(Model.Semestre.Semestres, "IdSemestre", "Descripcion"),
                "Seleccione un semestre", new { @class = "form-control", @id = "ddlSemestre", @onchange = "FillMaterias()" })
@@ -85,9 +86,8 @@
             </div>
         </div>
 
-        <select>
-            <option value="">Texto</option>
-        </select>
+        <p>Date: <input type="text" id="datepicker"></p>
+
 
         <div>
             <button class="btn btn-success" type="submit">Guardar</button>
@@ -96,9 +96,15 @@
     }
 </div>
 
+
 <script src="~/Scripts/jquery-3.7.0.min.js"></script>
 <script>
+
     function validarNombre(input, event) {
+
+        var padre = $(input).closest("div");
+        var span = padre.find('span');
+        console.log(span);
 
         const regex = /^[a-zA-Z\s]+$/;
         var letra = event.key;
@@ -106,8 +112,10 @@
         if (regex.test(letra)) {
             $(input).removeClass("border border-danger");
             $(input).addClass("border border-success");
+            $(span).attr("hidden", "hidden")
         } else {
             event.preventDefault();
+            $(span).removeAttr('hidden').text("Solo se aceptan letras.").css("color", "red");
             $(input).addClass("border border-danger");
             $(input).removeClass("border border-success");
         }
