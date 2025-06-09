@@ -37,5 +37,33 @@ namespace SL_WCF
             };
 
         }
+
+        public SL_WCF.Result GetAll(ML.Materia materia)
+        {
+            ML.Result result = BL.Materia.GetAllSP(materia);
+
+            return new SL_WCF.Result
+            {
+                Correct = result.Correct,
+                ErrorMessage = result.ErrorMessage,
+                Objects = result.Objects,
+                Object = result.Object,
+                Ex = result.Ex
+            };
+        }
+
+        public SL_WCF.Result GetById(int IdMateria)
+        {
+            ML.Result result = BL.Materia.GetByIdEFSP(IdMateria);
+
+            return new SL_WCF.Result
+            {
+                Correct = result.Correct,
+                ErrorMessage = result.ErrorMessage,
+                Objects = result.Objects,
+                Object = result.Object,
+                Ex = result.Ex
+            };
+        }
     }
 }

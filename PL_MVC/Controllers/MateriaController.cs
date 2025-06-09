@@ -64,7 +64,16 @@ namespace PL_MVC.Controllers
             materia.Nombre = "";
             materia.Semestre.IdSemestre = 0;
 
-            result = BL.Materia.GetAllSP(materia);
+            //result = BL.Materia.GetAllSP(materia);
+            MateriaReference.MateriaClient materiaSOAP = new MateriaReference.MateriaClient();
+
+            var respuesta = materiaSOAP.GetAll(materia);
+
+            if (respuesta.Correct)
+            {
+                result.Correct = respuesta.Correct;
+                result.Objects = respuesta.Objects.ToList();
+            }
 
             if (result.Correct)
             {
@@ -225,7 +234,7 @@ namespace PL_MVC.Controllers
         {
             // arreglo de bytes => Byte []
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //todo esta bien
 
@@ -246,23 +255,25 @@ namespace PL_MVC.Controllers
                     }
                 }
 
-            if (ModelState.IsValid)
-            {
-                //true
-                if (materia.IdMateria > 0)
+                if (ModelState.IsValid)
                 {
-                    ML.Result result = BL.Materia.Update(materia);
+                    //true
+                    if (materia.IdMateria > 0)
+                    {
+                        ML.Result result = BL.Materia.Update(materia);
+                    }
+                    else
+                    {
+                        materia.Semestre = new ML.Semestre();
+
+                        materia.Semestre.IdSemestre = 19;
+                        BL.Materia.AddEFSP(materia);
+
+                        // Redireccionar al GetAll
+
+                        //return View("GetAll");
+                    }
                 }
-                else
-                {
-                    materia.Semestre = new ML.Semestre();
-
-                materia.Semestre.IdSemestre = 19;
-                BL.Materia.AddEFSP(materia);
-
-                // Redireccionar al GetAll
-
-                //return View("GetAll");
             }
             return RedirectToAction("GetAll");
         }

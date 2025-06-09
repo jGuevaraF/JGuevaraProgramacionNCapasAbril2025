@@ -16,5 +16,13 @@ namespace SL_WCF
 
         [OperationContract]
         SL_WCF.Result Delete(int IdMateria);
+
+        [OperationContract]
+        [ServiceKnownType(typeof(ML.Materia))]
+        SL_WCF.Result GetAll(ML.Materia materia);
+
+        [OperationContract]
+        [ServiceKnownType(typeof(ML.Materia))]
+        SL_WCF.Result GetById(int IdMateria);
     }
 }
