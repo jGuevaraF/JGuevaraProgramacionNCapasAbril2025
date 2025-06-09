@@ -20,6 +20,15 @@ namespace SL_WCF
         [OperationContract]
         int Resta(int numero1, int numero2); //metodo no implementado
 
-         //int MyProperty { get; set; }
+        //int MyProperty { get; set; }
+
+
     }
+
+    //[DataContract]
+    //public class Ejemplo
+    //{
+    //    [DataMember]
+    //    public int Id { get; set; }
+    //}
 }
