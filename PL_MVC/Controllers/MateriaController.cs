@@ -67,7 +67,7 @@ namespace PL_MVC.Controllers
             //result = BL.Materia.GetAllSP(materia);
             MateriaReference.MateriaClient materiaSOAP = new MateriaReference.MateriaClient();
 
-            var respuesta = materiaSOAP.GetAll(materia);
+            PL_MVC.MateriaReference.Result respuesta = materiaSOAP.GetAll(materia);
 
             if (respuesta.Correct)
             {
