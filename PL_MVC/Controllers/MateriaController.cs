@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Razor.Parser;
+using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace PL_MVC.Controllers
@@ -65,15 +68,70 @@ namespace PL_MVC.Controllers
             materia.Semestre.IdSemestre = 0;
 
             //result = BL.Materia.GetAllSP(materia);
-            MateriaReference.MateriaClient materiaSOAP = new MateriaReference.MateriaClient();
 
-            var respuesta = materiaSOAP.GetAll(materia);
+            string action = "http://tempuri.org/IMateria/GetAll";
+            string url = "http://localhost:52731/Materia.svc";
 
-            if (respuesta.Correct)
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Headers.Add("SOAPAction", action);
+            request.ContentType = "text/xml;charset=\"utf-8\"";
+            request.Accept = "text/xml";
+            request.Method = "POST";
+
+            string soapEnvelope = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"" xmlns:ml=""http://schemas.datacontract.org/2004/07/ML"" xmlns:arr=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:GetAll>
+         <tem:materia>
+            <ml:Nombre>{materia.Nombre}</ml:Nombre>
+            <ml:Semestre>       
+               <ml:IdSemestre>{materia.Semestre.IdSemestre}</ml:IdSemestre>
+            </ml:Semestre>
+         </tem:materia>
+      </tem:GetAll>
+   </soapenv:Body>
+</soapenv:Envelope>";
+
+            using (Stream stream = request.GetRequestStream())
             {
-                result.Correct = respuesta.Correct;
-                result.Objects = respuesta.Objects.ToList();
+                byte[] content = Encoding.UTF8.GetBytes(soapEnvelope);
+                stream.Write(content, 0, content.Length);
             }
+
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string resultSOAP = reader.ReadToEnd();
+
+                        // Deserializar el XML
+                        var materiaSOAP = GetAllMaterias(resultSOAP); // Captura el objeto completo
+                        ML.Result resultSemestres = BL.Materia.SemestreGetAll();
+                        if (resultSemestres.Correct)
+                        {
+                            materiaSOAP.Semestre.Semestres = resultSemestres.Objects;
+                        }
+                        return View(materiaSOAP); // Asegúrate de que tu vista esté lista para recibir este objeto
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                ViewBag.Error = ex.Message; // Para mostrar en la vista si es necesario
+            }
+
+            //MateriaReference.MateriaClient materiaSOAP = new MateriaReference.MateriaClient();
+
+            //var respuesta = materiaSOAP.GetAll(materia);
+
+            //if (respuesta.Correct)
+            //{
+            //    result.Correct = respuesta.Correct;
+            //    result.Objects = respuesta.Objects.ToList();
+            //}
 
             if (result.Correct)
             {
@@ -300,6 +358,93 @@ namespace PL_MVC.Controllers
 
             return Json(resultMateria, JsonRequestBehavior.AllowGet);
         }
+
+
+
+
+        private ML.Materia GetAllMaterias(string xml)
+        {
+            var materia = new ML.Materia();
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+
+            var xdoc = XDocument.Parse(xml);
+
+            // Acceder a GetAllUsuarioResult
+            var objects = xdoc.Descendants("{http://schemas.microsoft.com/2003/10/Serialization/Arrays}anyType");
+
+            foreach (var elem in objects)
+            {
+                var materiaObject = new ML.Materia();
+                materiaObject.Semestre = new ML.Semestre();
+
+                //byte[]
+                int IdMateria;
+
+                if (elem.Element("{http://schemas.datacontract.org/2004/07/ML}IdMateria")?.Value != null)
+                {
+                    IdMateria = int.Parse(elem.Element("{http://schemas.datacontract.org/2004/07/ML}IdMateria")?.Value);
+                }
+                else
+                {
+                    IdMateria = 0;
+                }
+
+                //int.TryParse(elem.Element("{http://schemas.datacontract.org/2004/07/ML}IdMateria")?.Value, out IdMateria); //0
+                materiaObject.IdMateria = IdMateria;
+
+                // Acceso a otros campos
+                materiaObject.Nombre = (string)(elem.Element("{http://schemas.datacontract.org/2004/07/ML}Nombre")?.Value ?? string.Empty);
+
+                materiaObject.Descripcion = (string)(elem.Element("{http://schemas.datacontract.org/2004/07/ML}Descripcion")?.Value ?? string.Empty);
+
+                decimal Creditos;
+
+                if (elem.Element("{http://schemas.datacontract.org/2004/07/ML}Creditos")?.Value != null)
+                {
+                    Creditos = decimal.Parse(elem.Element("{http://schemas.datacontract.org/2004/07/ML}Creditos")?.Value);
+                }
+                else
+                {
+                    Creditos = 0;
+                }
+                materiaObject.Creditos = Creditos;
+
+                materiaObject.Fecha = (string)(elem.Element("{http://schemas.datacontract.org/2004/07/ML}Fecha")?.Value ?? string.Empty);
+
+
+                int IdSemestre;
+
+                if (elem.Element("{http://schemas.datacontract.org/2004/07/ML}IdSemestre")?.Value != null)
+                {
+                    IdSemestre = int.Parse(elem.Element("{http://schemas.datacontract.org/2004/07/ML}IdMateria")?.Value);
+                }
+                else
+                {
+                    IdSemestre = 0;
+                }
+
+                var Imagen = elem.Element("{http://schemas.datacontract.org/2004/07/ML}Imagen")?.Value;
+
+                if (!string.IsNullOrEmpty(Imagen))
+                {
+                    materiaObject.Imagen = Convert.FromBase64String(Imagen);
+                }
+                else
+                {
+                    materiaObject.Imagen = null;
+                }
+
+                materiaObject.Semestre.IdSemestre = IdSemestre;
+                result.Objects.Add(materiaObject);
+            }
+
+
+            materia.Materias = result.Objects;
+
+            return materia;
+        }
+
 
 
 
