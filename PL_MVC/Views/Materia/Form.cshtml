@@ -35,7 +35,13 @@
 
             <div>
                 @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+
+
                 @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", onkeypress = "validarNombre(this, event)" })
+
+                <input type="text" id="txtNombre" class="form-control" onkeypress="validarNombre(this,event)" name="Nombre" />
+
+
                 @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                 <span hidden="hidden"></span>
             </div>
@@ -45,6 +51,9 @@
             <div class="col-6">
                 @Html.LabelFor(model => model.Descripcion, new { @class = "form-label" })
                 @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control", onkeypress = "validarNombre(this, event)" })
+
+                <input type="text" name="Descripcion" id="Descripcion" class="form-control" onkeypress="validarNombre(this, event)"/>
+
                 <span hidden="hidden"></span>
             </div>
 

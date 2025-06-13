@@ -3,8 +3,10 @@ using Microsoft.Ajax.Utilities;
 using ML;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Razor.Parser;
@@ -63,6 +65,9 @@ namespace PL_MVC.Controllers
 
             materia.Nombre = "";
             materia.Semestre.IdSemestre = 0;
+
+            //GetAllSOAP();
+            GetAllREST();
 
             //result = BL.Materia.GetAllSP(materia);
             MateriaReference.MateriaClient materiaSOAP = new MateriaReference.MateriaClient();
@@ -303,5 +308,41 @@ namespace PL_MVC.Controllers
 
 
 
+
+        [NonAction]
+        public ML.Result GetAllREST()
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    string endPoint = ConfigurationManager.AppSettings["MateriaEndPoint"].ToString();
+
+
+                    client.BaseAddress = new Uri(endPoint);
+
+                    var responseTask = client.GetAsync("GetAll");
+
+                    responseTask.Wait();
+
+                    var respuesta = responseTask.Result;
+
+                    if (respuesta.IsSuccessStatusCode)
+                    {
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
     }
 }
