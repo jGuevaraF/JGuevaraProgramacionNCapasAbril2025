@@ -344,5 +344,49 @@ namespace PL_MVC.Controllers
 
             return result;
         }
+
+        [NonAction]
+        public ML.Result AddREST(ML.Materia materia)
+        {
+            ML.Result result = new ML.Result();
+            materia.ImagenBase64 = Convert.ToBase64String(materia.Imagen);
+            materia.Imagen = new byte[0];
+
+            try
+            {
+                using(var client = new HttpClient())
+                {
+                    string endPoint = ConfigurationManager.AppSettings["MateriaEndPoint"].ToString();
+
+                    client.BaseAddress = new Uri(endPoint);
+                    var respuesta = client.PostAsJsonAsync<ML.Materia>("Add", materia);
+
+                    respuesta.Wait();
+
+                    var statusCode = respuesta.Result;
+
+                    if(statusCode.IsSuccessStatusCode)
+                    {
+                        result.Correct = true;
+                    } else
+                    {
+                        result.Correct = false;
+                        var readTask = statusCode.Content.ReadAsAsync<ML.Result>();
+
+                        readTask.Wait();
+
+                        result.ErrorMessage = readTask.Result.ErrorMessage;
+                    }
+                }
+
+            } catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+
+            return result;
+        }
     }
 }

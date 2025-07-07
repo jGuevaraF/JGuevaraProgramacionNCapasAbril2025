@@ -71,6 +71,29 @@ namespace SL_WebApi.Controllers
         {
             materia.IdMateria = IdMateria;
 
+            materia.Imagen = Convert.FromBase64String(materia.ImagenBase64);
+
+            ML.Result result = BL.Materia.Update(materia);
+
+            if (result.Correct)
+            {
+                return Content(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, result);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("Add")]
+        public IHttpActionResult Add([FromBody] ML.Materia materia)
+        {
+
+            materia.Imagen = Convert.FromBase64String(materia.ImagenBase64);
+            materia.ImagenBase64 = "";
+
             ML.Result result = BL.Materia.Update(materia);
 
             if (result.Correct)

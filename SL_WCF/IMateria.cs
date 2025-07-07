@@ -25,4 +25,11 @@ namespace SL_WCF
         [ServiceKnownType(typeof(ML.Materia))]
         SL_WCF.Result GetById(int IdMateria);
     }
+
+    public abstract class Test
+    {
+        public abstract void TestImprimir();
+
+        public Test() { }
+    }
 }

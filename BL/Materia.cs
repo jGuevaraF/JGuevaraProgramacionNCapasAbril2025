@@ -423,7 +423,12 @@ namespace BL
                             materia.Nombre = itemMateria.Nombre;
                             materia.Descripcion = itemMateria.Descripcion;
                             materia.Creditos = Convert.ToDecimal(itemMateria.Creditos);
+
+
                             materia.Imagen = itemMateria.Imagen;
+                            materia.ImagenBase64 = Convert.ToBase64String(itemMateria.Imagen);
+
+
                             materia.Semestre.IdSemestre = itemMateria.IdSemestre ?? 0;
                             materia.Fecha = now.ToString("dd/MM/yyyy");
                             //materia.Semestre.Nombre = itemMateria.Semestre;
